@@ -3,7 +3,8 @@ import dedent from 'dedent'
 import meta from '../../meta.json'
 const programName = meta.name
 
-const header = (level: number, text: string) => '#'.repeat(level) + ' ' + text
+const header = (level: number, ...text: string[]) =>
+  '#'.repeat(level) + ' ' + text.join(' ')
 
 const code = (...text: string[]) => '`' + text.join(' ') + '`'
 const codeBlock = (...text: string[]) => '```sh\n' + text.join(' ') + '\n```'
@@ -17,7 +18,7 @@ function template(commands: Command[], headerLevel: number) {
     commands
       .map((cmd) => {
         return `
-      ${header(headerLevel, code(cmd.name))}
+      ${header(headerLevel, 'Command', code(cmd.name))}
 
       ${cmd.description || 'Description not available'}
 

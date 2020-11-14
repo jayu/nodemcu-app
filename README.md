@@ -6,9 +6,9 @@
 
 <!-- cli-docs-start -->
 
-### `terminal`
+### Command `terminal`
 
-Description not available
+Run fully-featured terminal with output coloring and command history.
 
 #### Usage
 
@@ -21,9 +21,9 @@ nodemcu-app terminal [options]
 - `-p ,--port <value>` - serialport path eg. /dev/ttyUSB0 (**required**)
 - `-br ,--baudRate <value>` - connection baud rate (_optional_)
 
-### `docs`
+### Command `docs`
 
-Generate documentation of available commands into md file
+Generate documentation of available commands into md file.
 
 #### Usage
 

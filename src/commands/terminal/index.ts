@@ -9,6 +9,9 @@ type Options = {
 function create(program: commander.Command) {
   program
     .command('terminal')
+    .description(
+      'Run fully-featured terminal with output coloring and command history.'
+    )
     .requiredOption('-p, --port <value>', 'serialport path eg. /dev/ttyUSB0')
     .option('-br, --baudRate <value>', 'connection baud rate')
     .action((options: Options) => {
