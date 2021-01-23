@@ -48,7 +48,7 @@ function template(commands: Command[], headerLevel: number) {
         .map(
           ({ shortName, longName, argument, required, description }) => dedent`
         * ${code(
-          filterFalsy([shortName, longName]).join(' ,') +
+          filterFalsy([shortName, longName]).join(', ') +
             (argument ? ` ${argument}` : '')
         )} - ${description} (${required ? requiredStr : optionalStr})
       `

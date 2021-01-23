@@ -25,7 +25,7 @@
     "typecheck": "tsc --noEmit",
     "checks": "yarn lint && yarn format && yarn typecheck",
     "release": "release-it",
-    "postinstall": "husky install",
+    "_postinstall": "husky install",
     "prepublish": "pinst --disable",
     "postpublish": "pinst --enable"
   },

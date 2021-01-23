@@ -18,8 +18,8 @@ nodemcu-app terminal [options]
 
 #### Options
 
-- `-p ,--port <value>` - serialport path eg. /dev/ttyUSB0 (**required**)
-- `-br ,--baudRate <value>` - connection baud rate (_optional_)
+- `-p, --port <value>` - serialport path eg. /dev/ttyUSB0 (**required**)
+- `-br, --baudRate <value>` - connection baud rate (_optional_)
 
 ### Command `docs`
 
@@ -37,5 +37,17 @@ nodemcu-app docs <outputPath> [options]
 
 #### Options
 
-- `-hl ,--headerLevel <value>` - Initial header level (_optional_)
+- `-hl, --headerLevel <value>` - Initial header level (_optional_)
 <!-- cli-docs-end -->
+
+## Development
+
+First of all clone repo and install dependencies using `yarn`
+
+To start development simply run build script in watch mode:
+
+`yarn build:watch`
+
+The environemnt is ready, now run following command to start cli:
+
+`yarn dev`
