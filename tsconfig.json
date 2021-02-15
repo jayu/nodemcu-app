@@ -12,5 +12,5 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "exclude": ["./scripts/**/*", "./dist/**/*", "./bin.js", "./*.config.js"]
+  "exclude": ["./scripts/**/*", "./dist/**/*", "./bin.js", "./*.config.js", "release-it.js"]
 }

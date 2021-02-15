@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "docs-gen": "node ./scripts/addDocsToReadme.js",
     "dev": "node bin",
     "lint": "eslint --ext .js,.ts src",
     "lint:fix": "yarn lint --fix",
