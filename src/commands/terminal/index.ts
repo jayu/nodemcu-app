@@ -10,7 +10,7 @@ function create(program: commander.Command) {
   program
     .command('terminal')
     .description(
-      'Run fully-featured terminal with output coloring and command history.'
+      'Run fully-featured terminal with output coloring and command history. Can be used standalone, do not require nodemcu-app project.'
     )
     .option('-p, --port <value>', 'serialport path eg. /dev/ttyUSB0')
     .option('-br, --baudRate <value>', 'connection baud rate')

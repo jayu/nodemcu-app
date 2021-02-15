@@ -1,0 +1,316 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should create example project with cross compiler with copying it 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "./luac.cross",
+    "entryDir": "./src",
+    "moduleDirs": Array [
+      "./modules",
+    ],
+    "uploadToolBinary": "nodemcu-uploader",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "multiple",
+}
+`;
+
+exports[`Should create example project with cross compiler with copying it 2`] = `
+Array [
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "luac.cross",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "modules",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": null,
+            "isDirectory": false,
+            "name": "init.lua",
+          },
+        ],
+        "isDirectory": true,
+        "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
+
+exports[`Should create example project with cross compiler without copying it 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "/some-dir/luac.cross",
+    "entryDir": "./src",
+    "moduleDirs": Array [
+      "./modules",
+    ],
+    "uploadToolBinary": "nodemcu-uploader",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "multiple",
+}
+`;
+
+exports[`Should create example project with cross compiler without copying it 2`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "modules",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": null,
+            "isDirectory": false,
+            "name": "init.lua",
+          },
+        ],
+        "isDirectory": true,
+        "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
+
+exports[`Should create example project with setup type multiple 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "",
+    "entryDir": "./src",
+    "moduleDirs": Array [
+      "./modules",
+    ],
+    "uploadToolBinary": "nodemcu-uploader",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "multiple",
+}
+`;
+
+exports[`Should create example project with setup type multiple 2`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "modules",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": null,
+            "isDirectory": false,
+            "name": "init.lua",
+          },
+        ],
+        "isDirectory": true,
+        "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
+
+exports[`Should create example project with setup type multiple and custom dir names 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "",
+    "entryDir": "./source-code",
+    "moduleDirs": Array [
+      "./custom-modules",
+    ],
+    "uploadToolBinary": "nodemcu-uploader",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "multiple",
+}
+`;
+
+exports[`Should create example project with setup type multiple and custom dir names 2`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "custom-modules",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": null,
+            "isDirectory": false,
+            "name": "init.lua",
+          },
+        ],
+        "isDirectory": true,
+        "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "source-code",
+  },
+]
+`;
+
+exports[`Should create example project with setup type single 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "",
+    "entryDir": "./src",
+    "moduleDirs": Array [],
+    "uploadToolBinary": "nodemcu-uploader",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "single",
+}
+`;
+
+exports[`Should create example project with setup type single 2`] = `
+Array [
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "init.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
+
+exports[`Should create example project with using of luarocks modules 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "",
+    "entryDir": "./src",
+    "moduleDirs": Array [
+      "./modules",
+      "./luarocks-modules",
+    ],
+    "uploadToolBinary": "nodemcu-uploader",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "multiple",
+}
+`;
+
+exports[`Should create example project with using of luarocks modules 2`] = `
+Array [
+  Object {
+    "children": Array [],
+    "isDirectory": true,
+    "name": "luarocks-modules",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "modules",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": null,
+            "isDirectory": false,
+            "name": "init.lua",
+          },
+        ],
+        "isDirectory": true,
+        "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
