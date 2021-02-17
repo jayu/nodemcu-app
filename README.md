@@ -8,7 +8,7 @@
 
 ### Command `terminal`
 
-Run fully-featured terminal with output coloring and command history.
+Run fully-featured terminal with output coloring and command history. Can be used standalone, do not require nodemcu-app project.
 
 #### Usage
 
@@ -43,11 +43,29 @@ nodemcu-app docs <outputPath> [options]
 
 #### Arguments
 
-- `outputPath` - path to output \*.md file (_optional_)
+- `outputPath` - path to output \*.md file (**required**)
 
 #### Options
 
 - `-hl, --headerLevel <value>` - Initial header level (_optional_)
+
+### Command `bundle`
+
+Bundle a project and it's dependencies into one destination file
+
+#### Usage
+
+```sh
+nodemcu-app bundle [project-name] [options]
+```
+
+#### Arguments
+
+- `project-name` - Name of a project from entry directory (required for setup type multiple) (_optional_)
+
+#### Options
+
+- `-d, --dest [value]` - destination file path; defaults to 'dist/bundle.lua' (_optional_)
 <!-- cli-docs-end -->
 
 ## Development
