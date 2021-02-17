@@ -20,6 +20,11 @@ Array [
   Object {
     "children": null,
     "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
     "name": "luac.cross",
   },
   Object {
@@ -76,6 +81,11 @@ Object {
 exports[`Should create example project with cross compiler without copying it 2`] = `
 Array [
   Object {
+    "children": null,
+    "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
     "children": Array [
       Object {
         "children": null,
@@ -128,6 +138,11 @@ Object {
 
 exports[`Should create example project with setup type multiple 2`] = `
 Array [
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": ".gitignore",
+  },
   Object {
     "children": Array [
       Object {
@@ -182,6 +197,11 @@ Object {
 exports[`Should create example project with setup type multiple and custom dir names 2`] = `
 Array [
   Object {
+    "children": null,
+    "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
     "children": Array [
       Object {
         "children": null,
@@ -235,6 +255,11 @@ Array [
   Object {
     "children": null,
     "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
     "name": "settings.json",
   },
   Object {
@@ -263,7 +288,7 @@ Object {
     "entryDir": "./src",
     "moduleDirs": Array [
       "./modules",
-      "./luarocks-modules",
+      "./luarocks-modules-dir",
     ],
     "uploadToolBinary": "nodemcu-uploader",
   },
@@ -275,9 +300,14 @@ Object {
 exports[`Should create example project with using of luarocks modules 2`] = `
 Array [
   Object {
+    "children": null,
+    "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
     "children": Array [],
     "isDirectory": true,
-    "name": "luarocks-modules",
+    "name": "luarocks-modules-dir",
   },
   Object {
     "children": Array [

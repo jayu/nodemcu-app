@@ -57,21 +57,23 @@ function createCommandsInspector() {
         arguments: args.map((arg) => ({
           nameRaw: arg,
           name: arg.substring(1, arg.length - 1),
-          required: arg.charAt(0) === '['
+          required: arg.charAt(0) === '<'
         })),
         options: []
       }
       return this
     },
-    description(description: string, argDescription: Record<string, string>) {
+    description(description: string, argDescription?: Record<string, string>) {
       if (currentCommand !== null) {
         currentCommand.description = description
-        currentCommand.arguments.forEach((arg) => {
-          //eslint-disable-next-line
-          if (argDescription.hasOwnProperty(arg.name)) {
-            arg.description = argDescription[arg.name]
-          }
-        })
+        if (argDescription !== undefined) {
+          currentCommand.arguments.forEach((arg) => {
+            //eslint-disable-next-line
+            if (argDescription.hasOwnProperty(arg.name)) {
+              arg.description = argDescription[arg.name]
+            }
+          })
+        }
       }
       return this
     },

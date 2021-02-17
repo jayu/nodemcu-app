@@ -1,8 +1,7 @@
 import fs from 'fs';
 import mock from 'mock-fs';
-import snapshotDiff from 'snapshot-diff';
 import { createProject } from '../init';
-import { Answers, SetupType, UploadTool, YesOrLater, AnswerNames } from '../questions'
+import { SetupType, UploadTool, YesOrLater, AnswerNames } from '../types'
 const defaultProjectName = 'test-project';
 
 const defaultAnswers = {
@@ -19,12 +18,12 @@ const getSettingsJSON = (projectName: string) => {
   return JSON.parse(fs.readFileSync(`${projectName}/settings.json`).toString())
 }
 
-const readDir = (dir:string) => fs.readdirSync(dir, {withFileTypes: true})
+const readDir = (dir: string) => fs.readdirSync(dir, { withFileTypes: true })
 
-type Tree = Array<{name:string, isDirectory: boolean, children: Tree | null}>
+type Tree = Array<{ name: string, isDirectory: boolean, children: Tree | null }>
 
-const getFilesTree = (root:string):Tree => {
-  const dir =  readDir(root);
+const getFilesTree = (root: string): Tree => {
+  const dir = readDir(root);
   return dir.reduce<Tree>((tree, entry) => {
     return [
       ...tree,
@@ -39,7 +38,7 @@ const getFilesTree = (root:string):Tree => {
 
 beforeEach(() => {
   mock({
-    '/' :{}
+    '/': {}
   })
 })
 
@@ -58,7 +57,7 @@ it('Should create example project with setup type multiple', () => {
 })
 
 it('Should create example project with setup type single', () => {
-  createProject({...defaultAnswers, [AnswerNames.setupType]: SetupType.single});
+  createProject({ ...defaultAnswers, [AnswerNames.setupType]: SetupType.single });
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -99,7 +98,7 @@ it('Should create example project with cross compiler without copying it', () =>
 it('Should create example project with cross compiler with copying it', () => {
 
   mock({
-    '/some-dir/my-luac.cross' : 'fake-binary-content'
+    '/some-dir/my-luac.cross': 'fake-binary-content'
   })
   createProject({
     ...defaultAnswers,
@@ -117,12 +116,12 @@ it('Should create example project with cross compiler with copying it', () => {
 it('Should create example project with using of luarocks modules', () => {
 
   mock({
-    '/some-dir/my-luac.cross' : 'fake-binary-content'
+    '/some-dir/my-luac.cross': 'fake-binary-content'
   })
   createProject({
     ...defaultAnswers,
     [AnswerNames.useLuaRocks]: true,
-    [AnswerNames.luaRocksModulesDir]: 'luarocks-modules'
+    [AnswerNames.luaRocksModulesDir]: 'luarocks-modules-dir'
   });
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)

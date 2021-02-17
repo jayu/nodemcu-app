@@ -3,12 +3,15 @@ import path from 'path'
 import fs from 'fs'
 import rimraf from 'rimraf'
 
-import questions, {
+import questions from './questions'
+
+import {
   Answers,
-  UploadTool,
   YesOrLater,
-  SetupType
-} from './questions'
+  SetupType,
+  SettingsFile
+} from './types';
+
 import * as templates from './templates'
 
 export const createProject = (response: Answers) => {
@@ -45,17 +48,14 @@ export const createProject = (response: Answers) => {
         ? `./${response.projectsSubDir}`
         : './src'
 
-    const setupJSON = {
+    const settingsJSON: SettingsFile = {
       setupType: response.setupType,
       manifestVersion: '1.0',
       default: {
         entryDir,
         moduleDirs,
         crossCompilerPath,
-        uploadToolBinary:
-          response.uploadTool !== UploadTool.decideLater
-            ? response.uploadTool
-            : ''
+        uploadToolBinary: response.uploadTool
       }
     }
 
@@ -68,7 +68,7 @@ export const createProject = (response: Answers) => {
     // Save settings.json file
     fs.writeFileSync(
       path.join(tempDirPath, 'settings.json'),
-      JSON.stringify(setupJSON, undefined, 2)
+      JSON.stringify(settingsJSON, undefined, 2)
     )
 
     // Create an example module
@@ -95,6 +95,12 @@ export const createProject = (response: Answers) => {
     fs.writeFileSync(
       path.join(tempDirPath, entryDir, exampleProjectDirectory, 'init.lua'),
       templates.exampleInitFile
+    )
+
+    // Create gitignore for dist directories
+    fs.writeFileSync(
+      path.join(tempDirPath, '.gitignore'),
+      templates.gitignore
     )
 
     // Move temp directory to target project directory

@@ -1,4 +1,6 @@
-export const exampleModule = `
+import dedent from 'dedent'
+
+export const exampleModule = dedent`
 local function increment(value)
   return value + 1
 end
@@ -15,7 +17,7 @@ return {
 `
 export const exampleModuleName = 'exampleModule'
 
-export const exampleInitFile = `
+export const exampleInitFile = dedent`
 local exampleModule = require('${exampleModuleName}')
 
 print('Welcome in example nodemcu-app project')
@@ -25,4 +27,9 @@ print('Counter value: ' .. counter)
 counter = exampleModule.increment(counter)
 print('Counter value incremented by example module: ' .. counter)
 
+`
+
+
+export const gitignore = dedent`
+dist
 `

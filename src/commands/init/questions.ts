@@ -1,39 +1,8 @@
 import { PromptObject } from 'prompts'
 import fs from 'fs'
-import path from 'path'
+import { getAbsolutePath } from '../../utils'
 
-const getAbsolutePath = (value: string) => {
-  return path.isAbsolute(value) ? value : path.join(process.cwd(), value)
-}
-
-export enum AnswerNames {
-  setupType = 'setupType',
-  projectDir = 'projectDir',
-  projectsSubDir = 'projectsSubDir',
-  uploadTool = 'uploadTool',
-  useCrossCompiler = 'useCrossCompiler',
-  crossCompilerPath = 'crossCompilerPath',
-  copyLuaCross = 'copyLuaCross',
-  commonModulesDir = 'commonModulesDir',
-  useLuaRocks = 'useLuaRocks',
-  luaRocksModulesDir = 'luaRocksModulesDir'
-}
-
-export enum SetupType {
-  single = 'single',
-  multiple = 'multiple'
-}
-
-export enum UploadTool {
-  nodemcuUploader = 'nodemcu-uploader',
-  nodemcuTool = 'nodemcu-tool',
-  decideLater = ''
-}
-
-export enum YesOrLater {
-  yes = 'yes',
-  decideLater = 'decideLater'
-}
+import {AnswerNames, SetupType, Answers, YesOrLater, UploadTool } from './types';
 
 const nonEmptyValidator = (value: string) => {
   return value.trim().length > 0 ? true : 'Value cannot be empty.'
@@ -187,16 +156,5 @@ const questions = [
   }
 ]
 
-export type Answers = {
-  [AnswerNames.projectDir]: string
-  [AnswerNames.setupType]: SetupType
-  [AnswerNames.projectsSubDir]: string
-  [AnswerNames.uploadTool]: UploadTool
-  [AnswerNames.useCrossCompiler]: YesOrLater
-  [AnswerNames.crossCompilerPath]?: string
-  [AnswerNames.copyLuaCross]?: boolean
-  [AnswerNames.commonModulesDir]: string
-  [AnswerNames.useLuaRocks]: boolean
-  [AnswerNames.luaRocksModulesDir]?: string
-}
+
 export default questions as PromptObject[]
