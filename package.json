@@ -38,6 +38,7 @@
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
+    "@release-it/conventional-changelog": "^2.0.0",
     "@types/dedent": "^0.7.0",
     "@types/jest": "^26.0.20",
     "@types/mock-fs": "^4.13.0",

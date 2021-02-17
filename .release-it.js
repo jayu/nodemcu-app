@@ -1,6 +1,6 @@
 module.exports = {
   "hooks": {
-    "before:init": "npm run checks",
+    "before:init": ["npm run checks"],
     // Docs are generated using build CLI, so we have to build first
     "after:bump": ["npm run build", "npm run docs-gen"]
   },
@@ -10,7 +10,9 @@ module.exports = {
     "tag": true,
     "push": true,
   },
-  "github": {
-    "release": true
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular"
+    }
   }
 }
