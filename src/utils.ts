@@ -22,3 +22,9 @@ export const exitWithError = (...errorMessages: string[]) => {
   errorMessages.forEach((msg) => console.log(msg))
   process.exit(1)
 }
+
+export enum FSNames {
+  BUNDLE = 'bunle.lua',
+  INIT = 'init.lua',
+  DIST = 'dist'
+}

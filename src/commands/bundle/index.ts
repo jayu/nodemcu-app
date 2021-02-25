@@ -1,11 +1,9 @@
 import commander from 'commander'
 import fs from 'fs'
-import path from 'path'
-import rimraf from 'rimraf'
 
 import { bundle } from './bundle'
-import { resolveSettingsFile, getProjectsList, exitWithError } from '../../utils'
-import { SetupType } from '../init/types'
+import { resolveSettingsFile } from '../../utils'
+import { checkProjectName, getInitFilePath, determineDistDir, getBundleFilePath, prepareDistDir, checkInitFileExists } from '../common';
 
 type Options = {
   dest?: string
@@ -24,40 +22,27 @@ function create(program: commander.Command) {
     .action((projectName: string | undefined, { dest }: Options) => {
       const cwd = process.cwd()
       const settingsFile = resolveSettingsFile(cwd)
-      const { entryDir, moduleDirs } = settingsFile.default
-      const isMultipleSetup = settingsFile.setupType === SetupType.multiple;
+      const { moduleDirs } = settingsFile.default
 
-      const projectsList = isMultipleSetup ? getProjectsList(cwd, entryDir) : null
-      if (isMultipleSetup && projectName === undefined && projectsList !== null) {
-        exitWithError('[project-name] is required for setup type multiple.', `Avaliable projects are: ${projectsList.join(', ')}`)
-      }
+      checkProjectName(projectName, cwd, settingsFile);
 
-      if (projectsList !== null && projectName !== undefined && !projectsList.includes(projectName)) {
-        exitWithError(`Selected project '${projectName}' does not exist in ${entryDir}.`, `Avaliable projects are: ${projectsList.join(', ')}`)
-      }
+      const initFilePath = getInitFilePath(projectName, settingsFile)
 
-      const initFilePath = path.join(entryDir, projectName !== undefined ? projectName : '', 'init.lua')
+      checkInitFileExists(initFilePath)
 
       let distFilePath;
       if (dest !== undefined) {
         distFilePath = dest
       }
       else {
-        const distDirPath = isMultipleSetup && projectName !== undefined ? path.join(entryDir, projectName, 'dist') : './dist'
-        distFilePath = path.join(distDirPath, 'bundle.lua')
+        const distDirPath = determineDistDir(settingsFile, projectName)
+        distFilePath = getBundleFilePath(distDirPath)
 
         console.log('Cleaning dist folder...')
-
-        rimraf.sync(distDirPath)
-        fs.mkdirSync(distDirPath)
-      }
-
-      if (!fs.existsSync(initFilePath)) {
-        exitWithError(`${initFilePath} does not exist.`)
+        prepareDistDir(distDirPath)
       }
 
       const code = bundle(initFilePath, moduleDirs)
-
       fs.writeFileSync(distFilePath, code)
 
       console.log(`Bundle generated successfully: ${distFilePath} !`)
