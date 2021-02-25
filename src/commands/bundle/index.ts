@@ -3,7 +3,8 @@ import fs from 'fs'
 
 import { bundle } from './bundle'
 import { resolveSettingsFile } from '../../utils'
-import { checkProjectName, getInitFilePath, determineDistDir, getBundleFilePath, prepareDistDir, checkInitFileExists } from '../common';
+import { checkProjectName, getInitFilePath, determineDistDir, getBundleFilePath, prepareDistDir, checkInitFileExists } from '../commonFunctions';
+import { projectNameDesc } from '../commonOptions'
 
 type Options = {
   dest?: string
@@ -14,9 +15,7 @@ function create(program: commander.Command) {
     .command('bundle [project-name]')
     .description(
       'Bundle a project and it\'s dependencies into one destination file',
-      {
-        'project-name': 'Name of a project from entry directory (required for setup type multiple)'
-      }
+      projectNameDesc
     )
     .option('-d, --dest [value]', 'destination file path; defaults to \'dist/bundle.lua\'')
     .action((projectName: string | undefined, { dest }: Options) => {

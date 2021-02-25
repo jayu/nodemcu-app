@@ -1,10 +1,9 @@
 import commander from 'commander'
 import startTerminal from './terminal'
 
-type Options = {
-  port?: string
-  baudRate?: string
-}
+import { portOption, PortOptionType, baudRateOption, BaudRateOptionType } from '../commonOptions'
+
+type Options = PortOptionType & BaudRateOptionType
 
 function create(program: commander.Command) {
   program
@@ -12,8 +11,8 @@ function create(program: commander.Command) {
     .description(
       'Run fully-featured terminal with output coloring and command history. Can be used standalone, do not require nodemcu-app project.'
     )
-    .option('-p, --port <value>', 'serialport path eg. /dev/ttyUSB0')
-    .option('-br, --baudRate <value>', 'connection baud rate')
+    .option(...portOption)
+    .option(...baudRateOption)
     .action((options: Options) => {
       const baudRate =
         options.baudRate !== undefined ? parseInt(options.baudRate) : undefined
