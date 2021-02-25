@@ -3,7 +3,7 @@ import fs from 'fs'
 import cp from 'child_process'
 import dedent from 'dedent'
 
-import { exitWithError } from '../utils'
+import { exitWithError, FSNames, noExt } from '../utils'
 import LFSLoaderContent from './LFS-loader';
 
 type Args = {
@@ -18,11 +18,11 @@ const throwCompilationError = (error: string) => {
 }
 
 const compileToBytecode = ({ compilerBinaryPath, programCode, projectDistDir }: Omit<Args, 'LFS'>): string[][] => {
-  const bundleFileName = 'bundle.lua'
+  const bundleFileName = FSNames.BUNDLE
   const bundleFilePath = path.join(projectDistDir, bundleFileName)
   fs.writeFileSync(bundleFilePath, programCode)
 
-  const distFileName = 'init.lc'
+  const distFileName = FSNames.INIT_BYTE_CODE
   const distFilePath = path.join(projectDistDir, distFileName)
 
   try {
@@ -35,26 +35,26 @@ const compileToBytecode = ({ compilerBinaryPath, programCode, projectDistDir }: 
     throwCompilationError(actualErrorMsg)
     return []
   }
-  const distInitLuaPath = path.join(projectDistDir, 'init.lua')
+  const distInitLuaPath = path.join(projectDistDir, FSNames.INIT)
   fs.writeFileSync(distInitLuaPath, dedent`
-      require('init')
+      require('${noExt(FSNames.INIT_BYTE_CODE)}')
     `)
 
-  return [[distFilePath, distFileName], [distInitLuaPath, 'init.lua']]
+  return [[distFilePath, distFileName], [distInitLuaPath, FSNames.INIT]]
 }
 
 const compileToLFS = ({ compilerBinaryPath, programCode, projectDistDir }: Omit<Args, 'LFS'>): string[][] => {
-  const bundleFileName = 'bundle.lua'
+  const bundleFileName = FSNames.BUNDLE
   const bundleFilePath = path.join(projectDistDir, bundleFileName)
   fs.writeFileSync(bundleFilePath, programCode)
 
-  const LFSLoaderDistFilePath = path.join(projectDistDir, '_init.lua')
+  const LFSLoaderDistFilePath = path.join(projectDistDir, FSNames.LFS_LOADER_INIT)
   fs.writeFileSync(LFSLoaderDistFilePath, LFSLoaderContent)
 
-  const distFileName = 'lfs.img'
-  const distFilePath = path.join(projectDistDir, distFileName)
+  const LFSFileName = FSNames.LFS_IMG
+  const LFSFilePath = path.join(projectDistDir, LFSFileName)
   try {
-    cp.execSync(`${compilerBinaryPath} -o ${distFilePath} -f ${LFSLoaderDistFilePath} ${bundleFilePath}`, {
+    cp.execSync(`${compilerBinaryPath} -o ${LFSFilePath} -f ${LFSLoaderDistFilePath} ${bundleFilePath}`, {
       stdio: [null, null, null],
     })
   }
@@ -63,16 +63,16 @@ const compileToLFS = ({ compilerBinaryPath, programCode, projectDistDir }: Omit<
     throwCompilationError(actualErrorMsg)
     return []
   }
-  const distInitLuaPath = path.join(projectDistDir, 'init.lua')
+  const distInitLuaPath = path.join(projectDistDir, FSNames.INIT)
   fs.writeFileSync(distInitLuaPath, dedent`
-    node.flashindex("_init")()
+    node.flashindex("${noExt(FSNames.LFS_LOADER_INIT)}")()
     LFS.bundle()
   `)
-  const distFlashReloadPath = path.join(projectDistDir, 'flash_reload.lua')
+  const distFlashReloadPath = path.join(projectDistDir, FSNames.FLASH_RELOAD)
   fs.writeFileSync(distFlashReloadPath, dedent`
-    node.flashreload("${distFileName}")
+    node.flashreload("${LFSFileName}")
   `)
-  return [[distFilePath, distFileName], [distInitLuaPath, 'init.lua'], [distFlashReloadPath, 'flash_reload.lua']]
+  return [[LFSFilePath, LFSFileName], [distInitLuaPath, FSNames.INIT], [distFlashReloadPath, FSNames.FLASH_RELOAD]]
 }
 
 /**

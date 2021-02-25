@@ -23,8 +23,14 @@ export const exitWithError = (...errorMessages: string[]) => {
   process.exit(1)
 }
 
+export const noExt = (luaFileName: string) => luaFileName.replace(/(\.lua)|(\.lc)/, '')
+
 export enum FSNames {
   BUNDLE = 'bunle.lua',
   INIT = 'init.lua',
-  DIST = 'dist'
+  INIT_BYTE_CODE = 'init.lc',
+  DIST = 'dist',
+  LFS_LOADER_INIT = '_init.lua',
+  LFS_IMG = 'lfs.img',
+  FLASH_RELOAD = 'flash_reload.lua'
 }
