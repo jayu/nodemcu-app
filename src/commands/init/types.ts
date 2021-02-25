@@ -43,7 +43,7 @@ export type Answers = {
 export type SettingsSet = {
   entryDir: string,
   moduleDirs: string[],
-  crossCompilerPath: string,
+  crossCompilerPath?: string,
   uploadToolBinary: UploadTool
 }
 

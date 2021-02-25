@@ -2,7 +2,7 @@ import { PromptObject } from 'prompts'
 import fs from 'fs'
 import { getAbsolutePath } from '../../utils'
 
-import {AnswerNames, SetupType, Answers, YesOrLater, UploadTool } from './types';
+import { AnswerNames, SetupType, Answers, YesOrLater, UploadTool } from './types';
 
 const nonEmptyValidator = (value: string) => {
   return value.trim().length > 0 ? true : 'Value cannot be empty.'
@@ -110,7 +110,7 @@ const questions = [
   {
     type: 'select',
     name: AnswerNames.useCrossCompiler,
-    message: 'Would you like to use compiler or LFS (Lua File Store) features?',
+    message: 'Would you like to use compiler or LFS (Lua File Store) features to reduce NodeMCU RAM usage?',
     choices: [
       {
         title: 'yes',

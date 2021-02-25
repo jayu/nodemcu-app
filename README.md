@@ -31,24 +31,6 @@ Run interactive wizard that will create nodemcu-app project structure.
 nodemcu-app init
 ```
 
-### Command `docs`
-
-Generate documentation of available commands into md file.
-
-#### Usage
-
-```sh
-nodemcu-app docs <outputPath> [options]
-```
-
-#### Arguments
-
-- `outputPath` - path to output \*.md file (**required**)
-
-#### Options
-
-- `-hl, --headerLevel <value>` - Initial header level (_optional_)
-
 ### Command `bundle`
 
 Bundle a project and it's dependencies into one destination file
@@ -66,6 +48,24 @@ nodemcu-app bundle [project-name] [options]
 #### Options
 
 - `-d, --dest [value]` - destination file path; defaults to 'dist/bundle.lua' (_optional_)
+
+### Command `docs`
+
+Generate documentation of available commands into md file.
+
+#### Usage
+
+```sh
+nodemcu-app docs <outputPath> [options]
+```
+
+#### Arguments
+
+- `outputPath` - path to output \*.md file (**required**)
+
+#### Options
+
+- `-hl, --headerLevel <value>` - Initial header level (_optional_)
 <!-- cli-docs-end -->
 
 ## Development

@@ -49,7 +49,7 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
           const moduleHash = `m${crypto.createHash('md5').update(modulePath).digest('hex')}`
           const [code, subModulesToHoist, subBundledModules] = bundleFile(modulePath, modulesLookupPaths, { ...bundledModules })
           const moduleToHoist = dedent`
-          function ${moduleHash} ()
+          function ${moduleHash}()
             ${code}
           end
           `

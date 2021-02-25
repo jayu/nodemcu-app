@@ -8,6 +8,6 @@ import createBundle from './bundle'
 export default function createAll(program: commander.Command) {
   createTerminal(program)
   createInit(program)
-  createDocs(program)
   createBundle(program)
+  createDocs(program)
 }
