@@ -18,6 +18,8 @@ nodemcu-app terminal [options]
 
 #### Options
 
+- `-c, --cmd <string>` - Command to execute after starting the terminal (_optional_)
+- `-t, --timeout <number>` - Timeout after terminal should be closed in seconds (_optional_)
 - `-p, --port <value>` - serialport path eg. /dev/ttyUSB0 (_optional_)
 - `-br, --baudRate <value>` - connection baud rate (_optional_)
 
@@ -48,6 +50,27 @@ nodemcu-app bundle [project-name] [options]
 #### Options
 
 - `-d, --dest [value]` - destination file path; defaults to 'dist/bundle.lua' (_optional_)
+
+### Command `upload`
+
+Compile and upload a project to NodeMCU device using selected uploader
+
+#### Usage
+
+```sh
+nodemcu-app upload [project-name] [options]
+```
+
+#### Arguments
+
+- `project-name` - Name of a project from entry directory (required for setup type multiple) (_optional_)
+
+#### Options
+
+- `--noCompile` - Skip compilation process and upload raw .lua project bundle to NodeMCU. (_optional_)
+- `--lfs` - Indicates if Lua File Store should be used. Note that your device has to be flashed with special firmware build to support LFS. (_optional_)
+- `-p, --port <value>` - serialport path eg. /dev/ttyUSB0 (_optional_)
+- `-br, --baudRate <value>` - connection baud rate (_optional_)
 
 ### Command `docs`
 
