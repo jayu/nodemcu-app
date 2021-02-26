@@ -6,12 +6,12 @@ export const getAbsolutePath = (value: string) => {
   return path.isAbsolute(value) ? value : path.join(process.cwd(), value)
 }
 
-export const resolveSettingsFile = (cwd: string): SettingsFile => {
+export const resolveSettingsFile = (cwd: string): SettingsFile | never => {
   const filePath = path.join(cwd, 'settings.json')
   if (fs.existsSync(filePath)) {
     return JSON.parse(fs.readFileSync(filePath).toString())
   }
-  throw new Error(`Settings.json file not foun in '${cwd}'`)
+  return exitWithError(`Settings.json file not foun in '${cwd}'`)
 }
 
 export const getProjectsList = (rootDirPath: string, projectsDirectory: string): string[] => {
@@ -26,7 +26,7 @@ export const exitWithError = (...errorMessages: string[]) => {
 export const noExt = (luaFileName: string) => luaFileName.replace(/(\.lua)|(\.lc)/, '')
 
 export enum FSNames {
-  BUNDLE = 'bunle.lua',
+  BUNDLE = 'bundle.lua',
   INIT = 'init.lua',
   INIT_BYTE_CODE = 'init.lc',
   DIST = 'dist',
@@ -34,3 +34,5 @@ export enum FSNames {
   LFS_IMG = 'lfs.img',
   FLASH_RELOAD = 'flash_reload.lua'
 }
+
+export const defaultBaudRate = 115200

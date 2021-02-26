@@ -1,7 +1,7 @@
 import commander from 'commander'
 import fs from 'fs'
 
-import { bundle } from './bundle'
+import bundle from './bundle'
 import { resolveSettingsFile } from '../../utils'
 import { checkProjectName, getInitFilePath, determineDistDir, getBundleFilePath, prepareDistDir, checkInitFileExists } from '../commonFunctions';
 import { projectNameDesc } from '../commonOptions'

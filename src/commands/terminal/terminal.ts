@@ -1,5 +1,5 @@
 import readline from 'readline'
-import serialport, { list } from 'serialport'
+import serialport from 'serialport'
 import ColorTerminal from './color-terminal'
 import SanitizeUserInput from './sanitize-user-input'
 import debounce from './debounce'
@@ -8,9 +8,11 @@ import { greenBright, bold } from 'colorette'
 type Options = {
   baudRate: number
   port: string
+  timeout?: number,
+  command?: string
 }
 
-function startTerminal({ port, baudRate }: Options) {
+function startTerminal({ port, baudRate, timeout, command }: Options) {
   const device = new serialport(port, {
     baudRate: baudRate,
     autoOpen: false
@@ -60,31 +62,23 @@ function startTerminal({ port, baudRate }: Options) {
   device.open((error) => {
     if (error) {
       console.error(
-        `Failed to open connection to port ${port} with baud rate ${baudRate}. Make sure port is owned by your os user`
+        `Failed to open connection to port ${port} with baud rate ${baudRate}. Make sure port is owned by your OS user`
       )
       process.exit(1)
     } else {
       clearTerminal()
+      if (command) {
+        process.stdin.push(`${command}\r\n`)
+      }
+      if (timeout) {
+        setTimeout(() => {
+          device.close()
+          process.exit(0)
+        }, timeout * 1000 - 100)
+      }
+
     }
   })
 }
 
-async function init({ baudRate = 115200, port: _port }: Partial<Options>) {
-  let port = _port
-  if (port === undefined) {
-    const ports = await list()
-    if (ports.length > 0) {
-      port = ports[0].path
-      console.log(`No port provided. Using found port ${port}`)
-    } else {
-      console.error('No available ports found')
-      process.exit(1)
-    }
-  }
-  startTerminal({
-    baudRate,
-    port
-  })
-}
-
-export default init
+export default startTerminal

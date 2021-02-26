@@ -74,7 +74,7 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
   return [bundleLines.join('\n'), hoistedModules, bundledModules]
 }
 
-export const bundle = (entryFilePath: string, moduleDirs = [] as string[]) => {
+const bundle = (entryFilePath: string, moduleDirs = [] as string[]) => {
   const moduleLookupPaths = moduleDirs.map(createLookupPath).reduce((lookupPaths, flatList) => [...flatList, ...lookupPaths], [])
   const [code, modulesToHoist] = bundleFile(entryFilePath, moduleLookupPaths)
   const program = dedent`
@@ -83,3 +83,5 @@ export const bundle = (entryFilePath: string, moduleDirs = [] as string[]) => {
   `
   return program
 }
+
+export default bundle

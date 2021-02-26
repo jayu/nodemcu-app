@@ -66,7 +66,7 @@ const compileToLFS = ({ compilerBinaryPath, programCode, projectDistDir }: Omit<
   const distInitLuaPath = path.join(projectDistDir, FSNames.INIT)
   fs.writeFileSync(distInitLuaPath, dedent`
     node.flashindex("${noExt(FSNames.LFS_LOADER_INIT)}")()
-    LFS.bundle()
+    LFS.${noExt(FSNames.BUNDLE)}()
   `)
   const distFlashReloadPath = path.join(projectDistDir, FSNames.FLASH_RELOAD)
   fs.writeFileSync(distFlashReloadPath, dedent`
