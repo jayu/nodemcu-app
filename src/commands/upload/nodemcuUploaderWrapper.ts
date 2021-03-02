@@ -2,10 +2,19 @@ import cp from 'child_process'
 import { UploaderWrapperDataType } from './types';
 
 const uploadFiles = ({ baudRate, port, files }: UploaderWrapperDataType): string | null => {
-  const filesList = files.map((pair) => pair.join(':')).join(' ')
-  console.log('Uploader output:')
+  const filesList = files.map((pair) => pair.join(':'))
   try {
-    cp.execSync(`nodemcu-uploader --port ${port} --baud ${baudRate} upload ${filesList} `)
+    for (const fileNamesPair of filesList) {
+      /**
+       * nodemcu-uploader prints everything to stderr...
+       * Even if it support uploading multiple files at once, it do not always work. Uploading separatelly is more stable.
+       */
+      console.log(fileNamesPair)
+      const { stderr } = cp.spawnSync(`nodemcu-uploader`, ['--port', port, '--baud', baudRate.toString(), 'upload', fileNamesPair])
+      if (!stderr.toString().includes('All done!')) {
+        return stderr.toString()
+      }
+    }
   }
   catch (e) {
     return e.stderr.toString()
