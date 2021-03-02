@@ -62,9 +62,9 @@ To use `upload` script you will have to install [`nodemcu-uploader`](https://git
 
 > [`nodemcu-tool`](https://github.com/AndiDittrich/NodeMCU-Tool) will be supported soon, however the former is much faster
 
-To use **compilation** feature, you will need Lua cross compiler (`luac.cross`). You can read in NodeMCU docs on how to [build one](#Prerequisites) for yourself. `nodemcu-app init` will ask for the path to `luac.cross`.
+To use **compilation** feature, you will need Lua cross compiler (`luac.cross`). You can read in NodeMCU docs on how to [build one](https://nodemcu.readthedocs.io/en/release/getting-started/#build-luaccross) for yourself. `nodemcu-app init` will ask for the path to `luac.cross`.
 
-To use **LFS upload** feature you will have to, except having `luac.corss`, build NodeMCU firmware with a special settings for LFS support. You can build it using [NodeMCU custom builds](https://nodemcu-build.com/) or other methods. Once you flash LFS-ready firmware to ESP8266, just use `--lfs` flag for `upload` script, and the CLI will take care of everything! For more details about LFS [documentation](https://nodemcu-build.com/) is a good reading. If you really need to know more, read this [whitepaper](https://nodemcu.readthedocs.io/en/release/lfs/) in docs.
+To use **LFS upload** feature you will have to, except having `luac.corss`, build NodeMCU firmware with a special settings for LFS support. You can build it using [NodeMCU custom builds](https://nodemcu-build.com/) or other methods. Once you flash LFS-ready firmware to ESP8266, just use `--lfs` flag for `upload` script, and the CLI will take care of everything! For more details about LFS [documentation](https://nodemcu.readthedocs.io/en/release/getting-started/#compile-lua-into-lfs-image) is a good reading. If you really need to know more, read this [whitepaper](https://nodemcu.readthedocs.io/en/release/lfs/) in docs.
 
 ### Creating `nodemcu-app` project
 
