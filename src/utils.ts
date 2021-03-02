@@ -32,7 +32,6 @@ export enum FSNames {
   DIST = 'dist',
   LFS_LOADER_INIT = '_init.lua',
   LFS_IMG = 'lfs.img',
-  FLASH_RELOAD = 'flash_reload.lua'
 }
 
 export const defaultBaudRate = 115200

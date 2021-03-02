@@ -1,6 +1,6 @@
 import cp from 'child_process'
 import { UploaderWrapperFNType, UploaderWrapperDataType } from './types'
-import { exitWithError } from '../../utils'
+import { exitWithError, FSNames } from '../../utils'
 
 const handleUploadResult = (error: string | null) => {
   if (error !== null) {
@@ -30,10 +30,8 @@ export const uploadLFS = (uploader: UploaderWrapperFNType, data: UploaderWrapper
   handleUploadResult(result)
   try {
     const nodemcuAppBinaryPath = require.main?.filename
-    console.log('Restarting device...')
-    cp.execSync(`node ${nodemcuAppBinaryPath} terminal -c "node.restart()" -t 5 -p ${data.port} -br ${data.baudRate}`, { stdio: 'inherit' })
-    console.log('Device restarted. Reloading LFS image...')
-    cp.execSync(`node ${nodemcuAppBinaryPath} terminal -c "dofile('flash_reload.lua')" -t 5 -p ${data.port} -br ${data.baudRate}`, { stdio: 'inherit' })
+    console.log('Reloading LFS image...')
+    cp.execSync(`node ${nodemcuAppBinaryPath} terminal -c "node.LFS.reload('${FSNames.LFS_IMG}')" -t 5 -p ${data.port} -br ${data.baudRate}`, { stdio: 'inherit' })
     console.log('LFS upload process seems to be successfull')
   }
   catch (e) {
