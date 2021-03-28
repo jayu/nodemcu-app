@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
-import dedent from 'dedent'
 
 import { getAbsolutePath, exitWithError } from '../../utils'
 
@@ -48,8 +47,7 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
         if (bundledModules[modulePath] === undefined) {
           const moduleHash = `m${crypto.createHash('md5').update(modulePath).digest('hex')}`
           const [code, subModulesToHoist, subBundledModules] = bundleFile(modulePath, modulesLookupPaths, { ...bundledModules })
-          const moduleToHoist = dedent`
-          function ${moduleHash}()
+          const moduleToHoist = `function ${moduleHash}()
             ${code}
           end
           `
@@ -77,7 +75,7 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
 const bundle = (entryFilePath: string, moduleDirs = [] as string[]) => {
   const moduleLookupPaths = moduleDirs.map(createLookupPath).reduce((lookupPaths, flatList) => [...flatList, ...lookupPaths], [])
   const [code, modulesToHoist] = bundleFile(entryFilePath, moduleLookupPaths)
-  const program = dedent`
+  const program = `
   ${modulesToHoist.join('\n')}
   ${code}
   `
