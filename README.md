@@ -3,7 +3,7 @@
 </h3>
 
 <p align="center">
-  A tool-chain for effective NodeMCU (ESP8266, ESP32) apps development
+  A tool-chain for efficient NodeMCU (ESP8266, ESP32) apps development
 </p>
 
 ---

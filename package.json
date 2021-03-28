@@ -1,7 +1,7 @@
 {
   "name": "nodemcu-app",
   "version": "0.3.2",
-  "description": "A set of tools for effective NodeMCU development",
+  "description": "A tool-chain for efficient NodeMCU (ESP8266, ESP32) apps development",
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "files": [
