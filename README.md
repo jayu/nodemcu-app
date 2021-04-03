@@ -28,9 +28,8 @@ This project is a CLI tool with bunch of commands that helps develop non-trivial
 #### Coming soon
 
 - 📥 Installing Lua packages from Luarocks or NodeMCU Github repo
-- 🧰 Support for `nodemcu-tool`
 - 🇾 Multi environment support to be able to have different settings for ESP32 and ESP8266
-- 🕶️ watch mode for upload script to focus exclusivelly on coding
+- 🕶️ watch mode for upload script to focus exclusively on coding
 
 ### TypeScript for micro controllers
 

@@ -237,6 +237,64 @@ Array [
 ]
 `;
 
+exports[`Should create example project with setup type multiple nodemcu-tool uploader 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "",
+    "entryDir": "./src",
+    "moduleDirs": Array [
+      "./modules",
+    ],
+    "uploadToolBinary": "nodemcu-tool",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "multiple",
+}
+`;
+
+exports[`Should create example project with setup type multiple nodemcu-tool uploader 2`] = `
+Array [
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+    ],
+    "isDirectory": true,
+    "name": "modules",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": Array [
+          Object {
+            "children": null,
+            "isDirectory": false,
+            "name": "init.lua",
+          },
+        ],
+        "isDirectory": true,
+        "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
+
 exports[`Should create example project with setup type single 1`] = `
 Object {
   "default": Object {
@@ -337,6 +395,50 @@ Array [
         ],
         "isDirectory": true,
         "name": "example-project",
+      },
+    ],
+    "isDirectory": true,
+    "name": "src",
+  },
+]
+`;
+
+exports[`Should create project with setup type single,  nodemcu-tool, and no other options 1`] = `
+Object {
+  "default": Object {
+    "crossCompilerPath": "",
+    "entryDir": "./src",
+    "moduleDirs": Array [],
+    "uploadToolBinary": "nodemcu-tool",
+  },
+  "manifestVersion": "1.0",
+  "setupType": "single",
+}
+`;
+
+exports[`Should create project with setup type single,  nodemcu-tool, and no other options 2`] = `
+Array [
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": ".gitignore",
+  },
+  Object {
+    "children": null,
+    "isDirectory": false,
+    "name": "settings.json",
+  },
+  Object {
+    "children": Array [
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "exampleModule.lua",
+      },
+      Object {
+        "children": null,
+        "isDirectory": false,
+        "name": "init.lua",
       },
     ],
     "isDirectory": true,

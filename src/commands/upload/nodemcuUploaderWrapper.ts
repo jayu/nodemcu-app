@@ -1,7 +1,7 @@
 import cp from 'child_process'
 import { UploaderWrapperDataType } from './types';
 
-const uploadFiles = ({ baudRate, port, files }: UploaderWrapperDataType): string | null => {
+const uploadFiles = async ({ baudRate, port, files }: UploaderWrapperDataType): Promise<string | null> => {
   const filesList = files.map((pair) => pair.join(':'))
   try {
     for (const fileNamesPair of filesList) {

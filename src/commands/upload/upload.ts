@@ -12,21 +12,21 @@ const handleUploadResult = (error: string | null) => {
   }
 }
 
-export const uploadRawBundle = (uploader: UploaderWrapperFNType, data: UploaderWrapperDataType) => {
+export const uploadRawBundle = async (uploader: UploaderWrapperFNType, data: UploaderWrapperDataType) => {
   console.log('Uploading raw lua code bundle...')
-  const result = uploader(data);
+  const result = await uploader(data);
   handleUploadResult(result)
 }
 
-export const uploadNoLFS = (uploader: UploaderWrapperFNType, data: UploaderWrapperDataType) => {
+export const uploadNoLFS = async (uploader: UploaderWrapperFNType, data: UploaderWrapperDataType) => {
   console.log('Uploading compiled byte code...')
-  const result = uploader(data);
+  const result = await uploader(data);
   handleUploadResult(result)
 }
 
-export const uploadLFS = (uploader: UploaderWrapperFNType, data: UploaderWrapperDataType) => {
+export const uploadLFS = async (uploader: UploaderWrapperFNType, data: UploaderWrapperDataType) => {
   console.log('Uploading compiled LFS image...')
-  const result = uploader(data);
+  const result = await uploader(data);
   handleUploadResult(result)
   try {
     const nodemcuAppBinaryPath = require.main?.filename

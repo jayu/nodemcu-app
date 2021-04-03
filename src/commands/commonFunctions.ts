@@ -28,8 +28,9 @@ export const checkInitFileExists = (initFilePath: string) => {
 }
 
 export const checkUploader = (settingsFile: SettingsFile) => {
-  if (settingsFile.default.uploadToolBinary !== UploadTool.nodemcuUploader) {
-    exitWithError(`Unsupported uploader tool selected: ${settingsFile.default.uploadToolBinary}`)
+  const { uploadToolBinary } = settingsFile.default
+  if (uploadToolBinary !== UploadTool.nodemcuUploader && uploadToolBinary !== UploadTool.nodemcuTool) {
+    exitWithError(`Unsupported uploader tool selected: ${uploadToolBinary}`)
   }
 }
 

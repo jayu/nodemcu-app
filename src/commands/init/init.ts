@@ -35,11 +35,11 @@ export const createProject = (response: Answers) => {
     }
     const moduleDirs: string[] = []
 
-    if (response.setupType === SetupType.multiple) {
+    if (response.setupType === SetupType.multiple && response.commonModulesDir) {
       moduleDirs.push(`./${response.commonModulesDir}`)
     }
 
-    if (response.useLuaRocks) {
+    if (response.useLuaRocks === YesOrLater.yes && response.luaRocksModulesDir) {
       moduleDirs.push(`./${response.luaRocksModulesDir}`)
     }
 
@@ -66,16 +66,17 @@ export const createProject = (response: Answers) => {
     })
 
     // Save settings.json file
+    const settingsJSONString = JSON.stringify(settingsJSON, undefined, 2)
     fs.writeFileSync(
       path.join(tempDirPath, 'settings.json'),
-      JSON.stringify(settingsJSON, undefined, 2)
+      settingsJSONString
     )
 
     // Create an example module
     fs.writeFileSync(
       path.join(
         tempDirPath,
-        response.setupType === SetupType.multiple
+        response.setupType === SetupType.multiple && response.commonModulesDir
           ? response.commonModulesDir
           : entryDir,
         `${templates.exampleModuleName}.lua`
@@ -105,15 +106,39 @@ export const createProject = (response: Answers) => {
 
     // Move temp directory to target project directory
     fs.renameSync(tempDirPath, response.projectDir)
-  } catch (e) {
-    console.error('An error occurred during project setup:', e)
+    return {
+      success: true,
+      dirName: `./${response.projectDir}`,
+      settingsString: settingsJSONString
+    }
+  } catch (error) {
     rimraf.sync(tempDirPath)
+    return {
+      success: false,
+      error
+    }
   }
 }
 
 async function init() {
-  const response: Answers = (await prompts(questions)) as any
-  createProject(response)
+  let promptsCancelled = false
+  const onCancel = () => {
+    promptsCancelled = true
+  }
+  const response: Answers = (await prompts(questions, { onCancel })) as any
+  if (!promptsCancelled) {
+    const { success, dirName, settingsString, error } = createProject(response)
+    if (success) {
+      console.log(`Project created in ${dirName}`)
+      console.log('With settings:\n', settingsString)
+    }
+    else {
+      console.error('An error occurred during project setup:', error)
+    }
+  }
+  else {
+    console.log('Cancelled project creation')
+  }
 }
 
 export default init

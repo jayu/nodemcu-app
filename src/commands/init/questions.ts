@@ -93,16 +93,15 @@ const questions = [
         value: UploadTool.nodemcuUploader
       },
       {
-        title: 'I wll decide later',
-        description: 'You can tool name in generated setup file at any time',
-        value: UploadTool.decideLater
-      },
-      {
-        title: 'nodemcu-tool (integration available soon)',
+        title: 'nodemcu-tool',
         description:
           'Home page: https://github.com/AndiDittrich/NodeMCU-Tool. Requires JS. Quite slow upload.',
         value: UploadTool.nodemcuTool,
-        disabled: true
+      },
+      {
+        title: 'I wll decide later',
+        description: 'You can set tool name in generated setup file at any time',
+        value: UploadTool.decideLater
       }
     ],
     initial: 0

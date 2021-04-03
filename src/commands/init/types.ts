@@ -30,13 +30,13 @@ export enum YesOrLater {
 export type Answers = {
   [AnswerNames.projectDir]: string
   [AnswerNames.setupType]: SetupType
-  [AnswerNames.projectsSubDir]: string
+  [AnswerNames.projectsSubDir]?: string
   [AnswerNames.uploadTool]: UploadTool
   [AnswerNames.useCrossCompiler]: YesOrLater
   [AnswerNames.crossCompilerPath]?: string
   [AnswerNames.copyLuaCross]?: boolean
-  [AnswerNames.commonModulesDir]: string
-  [AnswerNames.useLuaRocks]: boolean
+  [AnswerNames.commonModulesDir]?: string
+  [AnswerNames.useLuaRocks]: YesOrLater
   [AnswerNames.luaRocksModulesDir]?: string
 }
 

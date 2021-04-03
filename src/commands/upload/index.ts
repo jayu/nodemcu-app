@@ -4,11 +4,14 @@ import commander from 'commander'
 import { resolveSettingsFile, defaultBaudRate, FSNames } from '../../utils'
 import { checkProjectName, getInitFilePath, determineDistDir, prepareDistDir, checkInitFileExists, findSerialPort, checkAndGetCompilerBinaryPath, checkUploader, getBundleFilePath } from '../commonFunctions';
 import { portOption, PortOptionType, baudRateOption, BaudRateOptionType } from '../commonOptions'
+import { UploadTool } from '../init/types'
 import { uploadNoLFS, uploadLFS, uploadRawBundle } from './upload'
 import bundle from '../bundle/bundle'
 import compile from '../../compile'
 import { UploaderWrapperDataType } from './types'
 import nodemcuUploaderWrapper from './nodemcuUploaderWrapper'
+import nodemcuToolWrapper from './nodemcuToolWrapper'
+
 
 type Options = PortOptionType & BaudRateOptionType & { lfs: boolean, noCompile: boolean }
 
@@ -30,7 +33,7 @@ function create(program: commander.Command) {
       const baudRate = _baudRate !== undefined ? parseInt(_baudRate, 10) : defaultBaudRate
       const cwd = process.cwd()
       const settingsFile = resolveSettingsFile(cwd)
-      const { moduleDirs } = settingsFile.default
+      const { moduleDirs, uploadToolBinary } = settingsFile.default
 
       checkUploader(settingsFile)
 
@@ -48,10 +51,7 @@ function create(program: commander.Command) {
       const programCode = bundle(initFilePath, moduleDirs)
       console.log('Program bundled')
 
-      /**
-       * Currently only nodemcu-uploader is supported
-       */
-      const uploader = nodemcuUploaderWrapper
+      const uploader = uploadToolBinary === UploadTool.nodemcuUploader ? nodemcuUploaderWrapper : nodemcuToolWrapper
 
       if (!noCompile) {
         const compilerBinaryPath = checkAndGetCompilerBinaryPath(settingsFile)
@@ -60,13 +60,14 @@ function create(program: commander.Command) {
         const data: UploaderWrapperDataType = {
           baudRate,
           port,
-          files: outputFiles
+          files: outputFiles,
+          cwd
         }
         if (lfs) {
-          uploadLFS(uploader, data)
+          await uploadLFS(uploader, data)
         }
         else {
-          uploadNoLFS(uploader, data)
+          await uploadNoLFS(uploader, data)
         }
       }
       else {
@@ -75,9 +76,10 @@ function create(program: commander.Command) {
         const data: UploaderWrapperDataType = {
           baudRate,
           port,
-          files: [[distFilePath, FSNames.INIT]]
+          files: [[distFilePath, FSNames.INIT]],
+          cwd
         }
-        uploadRawBundle(uploader, data)
+        await uploadRawBundle(uploader, data)
       }
     })
 }

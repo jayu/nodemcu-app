@@ -11,7 +11,7 @@ const defaultAnswers = {
   [AnswerNames.uploadTool]: UploadTool.nodemcuUploader,
   [AnswerNames.useCrossCompiler]: YesOrLater.decideLater,
   [AnswerNames.commonModulesDir]: 'modules',
-  [AnswerNames.useLuaRocks]: false,
+  [AnswerNames.useLuaRocks]: YesOrLater.decideLater,
 }
 
 const getSettingsJSON = (projectName: string) => {
@@ -120,11 +120,39 @@ it('Should create example project with using of luarocks modules', () => {
   })
   createProject({
     ...defaultAnswers,
-    [AnswerNames.useLuaRocks]: true,
+    [AnswerNames.useLuaRocks]: YesOrLater.yes,
     [AnswerNames.luaRocksModulesDir]: 'luarocks-modules-dir'
   });
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
+  mock.restore()
+  expect(settings).toMatchSnapshot()
+  expect(filesTree).toMatchSnapshot()
+})
+
+it('Should create example project with setup type multiple nodemcu-tool uploader', () => {
+  createProject({
+    ...defaultAnswers,
+    [AnswerNames.uploadTool]: UploadTool.nodemcuTool,
+  });
+  const settings = getSettingsJSON(defaultProjectName)
+  const filesTree = getFilesTree(defaultProjectName)
+  mock.restore()
+  expect(settings).toMatchSnapshot()
+  expect(filesTree).toMatchSnapshot()
+})
+
+it('Should create project with setup type single,  nodemcu-tool, and no other options', () => {
+  const projectName = 'somename'
+  createProject({
+    [AnswerNames.projectDir]: projectName,
+    [AnswerNames.setupType]: SetupType.single,
+    [AnswerNames.uploadTool]: UploadTool.nodemcuTool,
+    [AnswerNames.useCrossCompiler]: YesOrLater.decideLater,
+    [AnswerNames.useLuaRocks]: YesOrLater.decideLater,
+  });
+  const settings = getSettingsJSON(projectName)
+  const filesTree = getFilesTree(projectName)
   mock.restore()
   expect(settings).toMatchSnapshot()
   expect(filesTree).toMatchSnapshot()
