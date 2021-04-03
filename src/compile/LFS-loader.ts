@@ -1,74 +1,65 @@
-
 /**
- * 
  * SOURCE: https://github.com/nodemcu/nodemcu-firmware/blob/release/lua_examples/lfs/_init.lua
- * 
- * Comments were removed to reduce file size
- * 
  */
 
 export default `
--- SOURCE: https://github.com/nodemcu/nodemcu-firmware/blob/release/lua_examples/lfs/_init.lua
 --
 -- File: _init.lua
 --[[
-
   This is a template for the LFS equivalent of the SPIFFS init.lua.
-
   It is a good idea to such an _init.lua module to your LFS and do most of the LFS
   module related initialisaion in this. This example uses standard Lua features to
   simplify the LFS API.
-
-  The first section adds a 'LFS' table to _G and uses the __index metamethod to
-  resolve functions in the LFS, so you can execute the main function of module
-  'fred' by executing LFS.fred(params), etc. It also implements some standard
-  readonly properties:
-
+  For Lua 5.1, the first section adds a 'LFS' table to _G and uses the __index
+  metamethod to resolve functions in the LFS, so you can execute the main
+  function of module 'fred' by executing LFS.fred(params), etc.
+  It also implements some standard readonly properties:
   LFS._time    The Unix Timestamp when the luac.cross was executed.  This can be
                used as a version identifier.
-
   LFS._config  This returns a table of useful configuration parameters, hence
                  print (("0x%6x"):format(LFS._config.lfs_base))
                gives you the parameter to use in the luac.cross -a option.
-
   LFS._list    This returns a table of the LFS modules, hence
                  print(table.concat(LFS._list,'\n'))
                gives you a single column listing of all modules in the LFS.
-
+   For Lua 5.3 LFS table is populated by the LFS implementation in C so this part
+   of the code is skipped.
 ---------------------------------------------------------------------------------]]
-local index = node.flashindex
 
-local lfs_t = {
+local lfsindex = node.LFS and node.LFS.get or node.flashindex
+local G=_ENV or getfenv()
+local lfs_t
+if _VERSION == 'Lua 5.1' then
+    lfs_t = {
     __index = function(_, name)
-        local fn_ut, ba, ma, size, modules = index(name)
+        local fn_ut, ba, ma, size, modules = lfsindex(name)
         if not ba then
-            return fn_ut
+          return fn_ut
         elseif name == '_time' then
-            return fn_ut
+          return fn_ut
         elseif name == '_config' then
-            local fs_ma, fs_size = file.fscfg()
-            return {
-                lfs_base = ba,
-                lfs_mapped = ma,
-                lfs_size = size,
-                fs_mapped = fs_ma,
-                fs_size = fs_size
-            }
+          local fs_ma, fs_size = file.fscfg()
+          return {lfs_base = ba, lfs_mapped = ma, lfs_size = size,
+                  fs_mapped = fs_ma, fs_size = fs_size}
         elseif name == '_list' then
-            return modules
+          return modules
         else
-            return nil
+          return nil
         end
-    end,
+      end,
 
     __newindex = function(_, name, value) -- luacheck: no unused
         error("LFS is readonly. Invalid write to LFS." .. name, 2)
-    end
+      end,
+    }
 
-}
-
-local G = getfenv()
-G.LFS = setmetatable(lfs_t, lfs_t)
+    setmetatable(lfs_t,lfs_t)
+    G.module       = nil    -- disable Lua 5.0 style modules to save RAM
+    package.seeall = nil
+else
+    lfs_t = node.LFS
+end
+G.LFS = lfs_t
 
 --[[-------------------------------------------------------------------------------
   The second section adds the LFS to the require searchlist, so that you can
@@ -76,56 +67,38 @@ G.LFS = setmetatable(lfs_t, lfs_t)
   note that this is at the search entry following the FS searcher, so if you also
   have jean.lc or jean.lua in SPIFFS, then this SPIFFS version will get loaded into
   RAM instead of using. (Useful, for development).
-
   See docs/en/lfs.md and the 'loaders' array in app/lua/loadlib.c for more details.
-
 ---------------------------------------------------------------------------------]]
 
 package.loaders[3] = function(module) -- loader_flash
-    local fn, ba = index(module)
-    return ba and "Module not in LFS" or fn
+  return lfs_t[module]
 end
 
---[[-------------------------------------------------------------------------------
-  You can add any other initialisation here, for example a couple of the globals
-  are never used, so setting them to nil saves a couple of global entries
----------------------------------------------------------------------------------]]
-
-G.module = nil -- disable Lua 5.0 style modules to save RAM
-package.seeall = nil
-
---[[-------------------------------------------------------------------------------
-  These replaces the builtins loadfile & dofile with ones which preferentially
-  loads the corresponding module from LFS if present.  Flipping the search order
+--[[----------------------------------------------------------------------------
+  These replace the builtins loadfile & dofile with ones which preferentially
+  load from the filesystem and fall back to LFS.  Flipping the search order
   is an exercise left to the reader.-
----------------------------------------------------------------------------------]]
+------------------------------------------------------------------------------]]
 
-local lf, df = loadfile, dofile
+local lf = loadfile
 G.loadfile = function(n)
-    local mod, ext = n:match("(.*)%.(l[uc]a?)");
-    local fn, ba = index(mod)
-    if ba or (ext ~= 'lc' and ext ~= 'lua') then
-        return lf(n)
-    else
-        return fn
-    end
+  if file.exists(n) then return lf(n) end
+  local mod = n:match("(.*)%.l[uc]a?$")
+  local fn  = mod and lfsindex(mod)
+  return (fn or error (("Cannot find '%s' in FS or LFS"):format(n))) and fn
 end
 
-G.dofile = function(n)
-    local mod, ext = n:match("(.*)%.(l[uc]a?)");
-    local fn, ba = index(mod)
-    if ba or (ext ~= 'lc' and ext ~= 'lua') then
-        return df(n)
-    else
-        return fn()
-    end
-end
+-- Lua's dofile (luaB_dofile) reaches directly for luaL_loadfile; shim instead
+G.dofile = function(n) return assert(loadfile(n))() end
 
 -- luacheck: ignore
-local preload = "?.lc;?.lua", "/\\n;\\n?\\n!\\n-", "@init.lua", "_G", "_LOADED", "_LOADLIB", "__add", "__call", "__concat",
-    "__div", "__eq", "__gc", "__index", "__le", "__len", "__lt", "__mod", "__mode", "__mul", "__newindex", "__pow",
-    "__sub", "__tostring", "__unm", "collectgarbage", "cpath", "debug", "file", "file.obj", "file.vol", "flash",
-    "getstrings", "index", "ipairs", "list", "loaded", "loader", "loaders", "loadlib", "module", "net.tcpserver",
-    "net.tcpsocket", "net.udpsocket", "newproxy", "package", "pairs", "path", "preload", "reload", "require", "seeall",
-    "wdclr", "not enough memory", "sjson.decoder", "sjson.encoder", "tmr.timer"
+local preload = "?.lc;?.lua", "/\\n;\\n?\\n!\\n-", "@init.lua", "_G", "_LOADED",
+"_LOADLIB", "__add", "__call", "__concat", "__div", "__eq", "__gc", "__index",
+"__le", "__len", "__lt", "__mod", "__mode", "__mul", "__newindex", "__pow",
+"__sub", "__tostring", "__unm", "collectgarbage", "cpath", "debug", "file",
+"file.obj", "file.vol", "flash", "getstrings", "index", "ipairs", "list", "loaded",
+"loader", "loaders", "loadlib", "module", "net.tcpserver", "net.tcpsocket",
+"net.udpsocket", "newproxy", "package", "pairs", "path", "preload", "reload",
+"require", "seeall", "wdclr", "not enough memory", "sjson.decoder","sjson.encoder",
+"tmr.timer"
 `
