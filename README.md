@@ -20,7 +20,7 @@ This project is a CLI tool with bunch of commands that helps develop non-trivial
 
 - 🖥️ Fully-featured **terminal** with output coloring and command history
 - ✨ Application scaffolding generation that creates a settings file to glue everything up
-- 🧩 Robust **module system** that allows to crete custom reusable utilities
+- 🧩 Robust **module system** that allows to create custom reusable utilities
 - 📦 **Bundler** that is able to merge many source files into one
 - 🚢 **Uploader** that integrates already existing `nodemcu-uploader` or `nodemcu-tool` to bring all-in-one command for deploying your projects to the ESP
 - 🖴 Ability to compile and upload **Lua byte code** or **LFS** image to save precious RAM. It's utilizing Lua cross compiler.
