@@ -2,8 +2,8 @@ import fs from 'fs'
 import commander from 'commander'
 
 import { resolveSettingsFile, defaultBaudRate, FSNames } from '../../utils'
-import { checkProjectName, getInitFilePath, determineDistDir, prepareDistDir, checkInitFileExists, findSerialPort, checkAndGetCompilerBinaryPath, checkUploader, getBundleFilePath } from '../commonFunctions';
-import { portOption, PortOptionType, baudRateOption, BaudRateOptionType } from '../commonOptions'
+import { checkProjectName, getInitFilePath, determineDistDir, prepareDistDir, checkInitFileExists, findSerialPort, checkAndGetCompilerBinaryPath, checkUploader, getBundleFilePath, mergeEnvironments, checkManifestCompatibility } from '../commonFunctions';
+import { portOption, PortOptionType, baudRateOption, BaudRateOptionType, envOption, EnvOptionType } from '../commonOptions'
 import { UploadTool } from '../init/types'
 import { uploadNoLFS, uploadLFS, uploadRawBundle } from './upload'
 import bundle from '../bundle/bundle'
@@ -13,7 +13,7 @@ import nodemcuUploaderWrapper from './nodemcuUploaderWrapper'
 import nodemcuToolWrapper from './nodemcuToolWrapper'
 
 
-type Options = PortOptionType & BaudRateOptionType & { lfs: boolean, noCompile: boolean }
+type Options = PortOptionType & BaudRateOptionType & EnvOptionType & { lfs: boolean, noCompile: boolean }
 
 function create(program: commander.Command) {
   program
@@ -28,16 +28,18 @@ function create(program: commander.Command) {
     .option('--lfs', 'Indicates if Lua File Store should be used. Note that your device has to be flashed with special firmware build to support LFS.')
     .option(...portOption)
     .option(...baudRateOption)
-    .action(async (projectName: string | undefined, { port: _port, baudRate: _baudRate, lfs = false, noCompile = false }: Options) => {
+    .option(...envOption)
+    .action(async (projectName: string | undefined, { port: _port, baudRate: _baudRate, lfs = false, noCompile = false, env = [] }: Options) => {
       const port = _port || await findSerialPort()
       const baudRate = _baudRate !== undefined ? parseInt(_baudRate, 10) : defaultBaudRate
       const cwd = process.cwd()
-      const settingsFile = resolveSettingsFile(cwd)
-      const { moduleDirs, uploadToolBinary } = settingsFile.default
+      const settingsFile = mergeEnvironments(resolveSettingsFile(cwd), env)
+      const { moduleDirs, uploadToolBinary, envVars = {} } = settingsFile.default
 
       checkUploader(settingsFile)
 
       checkProjectName(projectName, cwd, settingsFile);
+      checkManifestCompatibility(settingsFile)
 
       const initFilePath = getInitFilePath(projectName, settingsFile)
 
@@ -48,7 +50,7 @@ function create(program: commander.Command) {
       console.log('Cleaning dist folder...')
       prepareDistDir(distDirPath)
 
-      const programCode = bundle(initFilePath, moduleDirs)
+      const programCode = bundle(initFilePath, moduleDirs, envVars)
       console.log('Program bundled')
 
       const uploader = uploadToolBinary === UploadTool.nodemcuUploader ? nodemcuUploaderWrapper : nodemcuToolWrapper

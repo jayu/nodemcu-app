@@ -10,7 +10,7 @@ Object {
     ],
     "uploadToolBinary": "nodemcu-uploader",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "multiple",
 }
 `;
@@ -73,7 +73,7 @@ Object {
     ],
     "uploadToolBinary": "nodemcu-uploader",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "multiple",
 }
 `;
@@ -131,7 +131,7 @@ Object {
     ],
     "uploadToolBinary": "nodemcu-uploader",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "multiple",
 }
 `;
@@ -189,7 +189,7 @@ Object {
     ],
     "uploadToolBinary": "nodemcu-uploader",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "multiple",
 }
 `;
@@ -247,7 +247,7 @@ Object {
     ],
     "uploadToolBinary": "nodemcu-tool",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "multiple",
 }
 `;
@@ -303,7 +303,7 @@ Object {
     "moduleDirs": Array [],
     "uploadToolBinary": "nodemcu-uploader",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "single",
 }
 `;
@@ -350,7 +350,7 @@ Object {
     ],
     "uploadToolBinary": "nodemcu-uploader",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "multiple",
 }
 `;
@@ -411,7 +411,7 @@ Object {
     "moduleDirs": Array [],
     "uploadToolBinary": "nodemcu-tool",
   },
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "setupType": "single",
 }
 `;

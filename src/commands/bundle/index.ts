@@ -3,11 +3,11 @@ import fs from 'fs'
 
 import bundle from './bundle'
 import { resolveSettingsFile } from '../../utils'
-import { checkProjectName, getInitFilePath, determineDistDir, getBundleFilePath, prepareDistDir, checkInitFileExists } from '../commonFunctions';
-import { projectNameDesc } from '../commonOptions'
+import { checkProjectName, getInitFilePath, determineDistDir, getBundleFilePath, prepareDistDir, checkInitFileExists, mergeEnvironments, checkManifestCompatibility } from '../commonFunctions';
+import { projectNameDesc, envOption, EnvOptionType } from '../commonOptions'
 
-type Options = {
-  dest?: string
+type Options = EnvOptionType & {
+  dest?: string,
 }
 
 function create(program: commander.Command) {
@@ -18,12 +18,15 @@ function create(program: commander.Command) {
       projectNameDesc
     )
     .option('-d, --dest [value]', 'destination file path; defaults to \'dist/bundle.lua\'')
-    .action((projectName: string | undefined, { dest }: Options) => {
+    .option(...envOption)
+    .action((projectName: string | undefined, { dest, env = [] }: Options) => {
       const cwd = process.cwd()
-      const settingsFile = resolveSettingsFile(cwd)
-      const { moduleDirs } = settingsFile.default
+      const settingsFile = mergeEnvironments(resolveSettingsFile(cwd), env)
+
+      const { moduleDirs, envVars = {} } = settingsFile.default
 
       checkProjectName(projectName, cwd, settingsFile);
+      checkManifestCompatibility(settingsFile)
 
       const initFilePath = getInitFilePath(projectName, settingsFile)
 
@@ -41,7 +44,7 @@ function create(program: commander.Command) {
         prepareDistDir(distDirPath)
       }
 
-      const code = bundle(initFilePath, moduleDirs)
+      const code = bundle(initFilePath, moduleDirs, envVars)
       fs.writeFileSync(distFilePath, code)
 
       console.log(`Bundle generated successfully: ${distFilePath} !`)

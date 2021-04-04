@@ -24,11 +24,11 @@ This project is a CLI tool with bunch of commands that helps develop non-trivial
 - 📦 **Bundler** that is able to merge many source files into one
 - 🚢 **Uploader** that integrates already existing `nodemcu-uploader` or `nodemcu-tool` to bring all-in-one command for deploying your projects to the ESP
 - 🖴 Ability to compile and upload **Lua byte code** or **LFS** image to save precious RAM. It's utilizing Lua cross compiler.
+- 🇾 Multi environment support to have different settings per device or firmware build including the power of env variables.
 
 #### Coming soon
 
 - 📥 Installing Lua packages from Luarocks or NodeMCU Github repo
-- 🇾 Multi environment support to be able to have different settings for ESP32 and ESP8266
 - 🕶️ watch mode for upload script to focus exclusively on coding
 
 ### TypeScript for micro controllers
@@ -57,9 +57,7 @@ npm -i -g nodemcu-app
 
 The CLI can be used standalone, however to leverage it's all potential you will have to equip with additional tools.
 
-To use `upload` script you will have to install [`nodemcu-uploader`](https://github.com/kmpm/nodemcu-uploader)
-
-> [`nodemcu-tool`](https://github.com/AndiDittrich/NodeMCU-Tool) will be supported soon, however the former is much faster
+To use `upload` script you will have to install [`nodemcu-uploader`](https://github.com/kmpm/nodemcu-uploader) or [`nodemcu-tool`](https://github.com/AndiDittrich/NodeMCU-Tool). The former is much faster.
 
 To use **compilation** feature, you will need Lua cross compiler (`luac.cross`). You can read in NodeMCU docs on how to [build one](https://nodemcu.readthedocs.io/en/release/getting-started/#build-luaccross) for yourself. `nodemcu-app init` will ask for the path to `luac.cross`.
 
@@ -91,7 +89,7 @@ Where `settings.json` is a file that stores information about generated project.
 ```json
 {
   "setupType": "multiple",
-  "manifestVersion": "1.0",
+  "manifestVersion": "1.1",
   "default": {
     "entryDir": "./projects",
     "moduleDirs": ["./modules", "./luarocks_modules"],
@@ -102,6 +100,141 @@ Where `settings.json` is a file that stores information about generated project.
 ```
 
 > In this example we decided to not use cross compilation feature. However you can update the path to cross compiler when you get ready.
+
+### Using different environments
+
+After creating a project using `nodemcu-app init`, you can add as many environments as you like, next to the `default` environment.
+
+For example, you might need to use different `luac.cross` for different firmware versions. In order to do this, you can add another environment to settings file, eg. `beta-firmware`:
+
+> Note that `luac.cross` might not work properly between different firmware versions, eg 2.0 and 3.0
+
+```json
+{
+  "setupType": "multiple",
+  "manifestVersion": "1.1",
+  "default": {
+    "entryDir": "./projects",
+    "moduleDirs": ["./modules", "./luarocks_modules"],
+    "crossCompilerPath": "./luac.cross",
+    "uploadToolBinary": "nodemcu-uploader"
+  },
+  "beta-firmware": {
+    "crossCompilerPath": "./beta-luac.cross"
+  }
+}
+```
+
+In order to use beta-firmware env, pass an `--env <value...>` flag to either `bundle` or `upload` script, eg.
+
+```sh
+nodemcu-app upload my-project --lfs --env beta-firmware
+```
+
+#### Environment variables
+
+You can also specify env variables using `envVars` key in a given env setting, eg:
+
+```json
+{
+  "setupType": "multiple",
+  "manifestVersion": "1.1",
+  "default": {
+    "entryDir": "./projects",
+    "moduleDirs": ["./modules", "./luarocks_modules"],
+    "crossCompilerPath": "./luac.cross",
+    "uploadToolBinary": "nodemcu-uploader",
+    "envVars": {
+      "IS_DEV": "true"
+    }
+  },
+  "beta-firmware": {
+    "crossCompilerPath": "./beta-luac.cross"
+  },
+  "prod": {
+    "envVars": {
+      "IS_DEV": "false"
+    }
+  }
+}
+```
+
+You can refer to given env var in the code using `$` sign followed by the variable name inside a string.
+
+> Note that using env vars is currently only supported inside strings.
+
+eg:
+
+```lua
+local isDev = "$IS_DEV"
+if (isDev) then
+  startWithDelay()
+else
+  startWithoutDelay()
+end
+```
+
+Env vars are interpolated during code bundling. You can not only use environment variables defined in `settings.json`, but also all variables defined in your OS will be available, eg:
+
+```sh
+SOME_VAR=VALUE nodemcu-app bundle/upload some-project
+```
+
+All variables from selected environments will be merge into one set, starting from your OS env vars and ending on the last provided environment.
+
+#### Using multiple environments at the same time
+
+You can use multiple environments at the same time. The environments will be merged into one, and the last you specified will eventually override values provided by the previous.
+
+For given config file
+
+```json
+{
+  "setupType": "multiple",
+  "manifestVersion": "1.1",
+  "default": {
+    "entryDir": "./projects",
+    "moduleDirs": ["./modules", "./luarocks_modules"],
+    "crossCompilerPath": "./luac.cross",
+    "uploadToolBinary": "nodemcu-uploader",
+    "envVars": {
+      "IS_DEV": "true",
+      "SERVER_ADDR": "localhost:3000"
+    }
+  },
+  "esp32": {
+    "crossCompilerPath": "./esp32-luac.cross",
+    "uploadToolBinary": "nodemcu-tool"
+  },
+  "remote-server": {
+    "envVars": {
+      "SERVER_ADDR": "example.com"
+    }
+  },
+  "prod": {
+    "envVars": {
+      "IS_DEV": "false"
+    }
+  }
+}
+```
+
+and specifying environments like `--env esp32 remote-server prod`
+
+You will end up with the following settings:
+
+```json
+{
+  "entryDir": "./projects",
+  "moduleDirs": ["./modules", "./luarocks_modules"],
+  "crossCompilerPath": "./esp32-luac.cross",
+  "uploadToolBinary": "nodemcu-tool",
+  "envVars": {
+    "IS_DEV": "false",
+    "SERVER_ADDR": "example.com"
+  }
+}
+```
 
 ## CLI reference
 

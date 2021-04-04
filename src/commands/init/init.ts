@@ -50,7 +50,7 @@ export const createProject = (response: Answers) => {
 
     const settingsJSON: SettingsFile = {
       setupType: response.setupType,
-      manifestVersion: '1.0',
+      manifestVersion: '1.1',
       default: {
         entryDir,
         moduleDirs,

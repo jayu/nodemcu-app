@@ -40,18 +40,21 @@ export type Answers = {
   [AnswerNames.luaRocksModulesDir]?: string
 }
 
+export type EnvVars = {
+  [key: string]: string | undefined
+}
+
 export type SettingsSet = {
   entryDir: string,
   moduleDirs: string[],
   crossCompilerPath?: string,
   uploadToolBinary: UploadTool
+  envVars?: EnvVars
 }
 
 export type SettingsFile = {
   setupType: SetupType,
-  manifestVersion: string,
+  manifestVersion: "1.0" | "1.1",
   default: SettingsSet,
-  // Those two are not supported yet
-  esp32?: SettingsSet
-  esp8266?: SettingsSet
+  [key: string]: SettingsSet | string | SetupType
 }

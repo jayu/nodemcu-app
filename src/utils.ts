@@ -11,7 +11,7 @@ export const resolveSettingsFile = (cwd: string): SettingsFile | never => {
   if (fs.existsSync(filePath)) {
     return JSON.parse(fs.readFileSync(filePath).toString())
   }
-  return exitWithError(`Settings.json file not foun in '${cwd}'`)
+  return exitWithError(`Settings.json file not found in '${cwd}'`)
 }
 
 export const getProjectsList = (rootDirPath: string, projectsDirectory: string): string[] => {
@@ -35,3 +35,8 @@ export enum FSNames {
 }
 
 export const defaultBaudRate = 115200
+
+//eslint-disable-next-line
+const pkg = require('../package.json')
+
+export const version: string = pkg.version
