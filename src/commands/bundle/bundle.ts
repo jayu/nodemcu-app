@@ -50,7 +50,7 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
           fileContent = fileContent.replace(match, `"${envVarValue}"`)
         }
         else {
-          console.warn(`Undefined env variable "${varName}" in ${entryFilePath}`)
+          throw new Error(`Undefined env variable "${varName}" in ${entryFilePath}`)
         }
       }
     }
