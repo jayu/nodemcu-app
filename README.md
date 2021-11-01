@@ -30,6 +30,9 @@ This project is a CLI tool with bunch of commands that helps develop non-trivial
 
 - 📥 Installing Lua packages from Luarocks or NodeMCU Github repo
 - 🕶️ watch mode for upload script to focus exclusively on coding
+- ✈️ Possiblity of OTA upload from CLI
+- 🎯 Support for Lua script native module resultion algorithm
+- ☁️ Support for LFS compilation in the cloud to eliminated dependency on local compiler
 
 ### TypeScript for micro controllers
 
