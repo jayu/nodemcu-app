@@ -48,8 +48,9 @@ export type SettingsSet = {
   entryDir: string,
   moduleDirs: string[],
   crossCompilerPath?: string,
-  uploadToolBinary: UploadTool
-  envVars?: EnvVars
+  uploadToolBinary: UploadTool,
+  envVars?: EnvVars,
+  otaUrl?: string
 }
 
 export type SettingsFile = {

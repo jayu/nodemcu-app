@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { SettingsFile } from './commands/init/types'
+import {URL } from 'url';
 
 export const getAbsolutePath = (value: string) => {
   return path.isAbsolute(value) ? value : path.join(process.cwd(), value)
@@ -40,3 +41,13 @@ export const defaultBaudRate = 115200
 const pkg = require('../package.json')
 
 export const version: string = pkg.version
+
+export const isValidUrl = (url:string) => {
+  try {
+    new URL(url);
+    return true
+  }
+  catch(_) {
+    return false
+  }
+}

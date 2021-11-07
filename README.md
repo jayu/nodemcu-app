@@ -23,6 +23,7 @@ This project is a CLI tool with bunch of commands that helps develop non-trivial
 - 🧩 Robust **module system** that allows to create custom reusable utilities
 - 📦 **Bundler** that is able to merge many source files into one
 - 🚢 **Uploader** that integrates already existing `nodemcu-uploader` or `nodemcu-tool` to bring all-in-one command for deploying your projects to the ESP
+- ✈️ Possibility to update LFS image Over The Air from CLI
 - 🖴 Ability to compile and upload **Lua byte code** or **LFS** image to save precious RAM. It's utilizing Lua cross compiler.
 - 🇾 Multi environment support to have different settings per device or firmware build including the power of env variables.
 
@@ -30,8 +31,7 @@ This project is a CLI tool with bunch of commands that helps develop non-trivial
 
 - 📥 Installing Lua packages from Luarocks or NodeMCU Github repo
 - 🕶️ watch mode for upload script to focus exclusively on coding
-- ✈️ Possiblity of OTA upload from CLI
-- 🎯 Support for Lua script native module resultion algorithm
+- 🎯 Support for Lua script native module resolution algorithm
 - ☁️ Support for LFS compilation in the cloud to eliminated dependency on local compiler
 
 ### TypeScript for micro controllers

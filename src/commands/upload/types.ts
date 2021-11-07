@@ -1,8 +1,8 @@
 export type UploaderWrapperDataType = {
-  port: string,
-  baudRate: number,
   files: string[][],
   cwd: string
-}
+  port: string,
+  baudRate: number,
+} 
 
 export type UploaderWrapperFNType = (data: UploaderWrapperDataType) => Promise<string | null>

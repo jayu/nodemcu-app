@@ -30,7 +30,7 @@
     "test": "jest",
     "checks": "yarn lint && yarn typecheck && yarn test",
     "release": "release-it",
-    "postinstall": "husky install",
+    "_postinstall": "husky install",
     "prepublish": "pinst --disable",
     "postpublish": "pinst --enable"
   },
@@ -43,6 +43,7 @@
     "@types/jest": "^26.0.20",
     "@types/mock-fs": "^4.13.0",
     "@types/node": "^14.14.7",
+    "@types/node-fetch": "2",
     "@types/prompts": "^2.0.9",
     "@types/rimraf": "^3.0.0",
     "@types/serialport": "^8.0.1",
@@ -66,6 +67,7 @@
     "colorette": "^1.2.1",
     "commander": "^6.2.0",
     "dedent": "^0.7.0",
+    "node-fetch": "2",
     "prompts": "^2.4.0",
     "rimraf": "^3.0.2",
     "serialport": "^9.0.2"
