@@ -307,6 +307,7 @@ nodemcu-app upload [project-name] [options]
 
 - `--noCompile` - Skip compilation process and upload raw .lua project bundle to NodeMCU. (_optional_)
 - `--lfs` - Indicates if Lua File Store should be used. Note that your device has to be flashed with special firmware build to support LFS. (_optional_)
+- `--lfsOta [url]` - Uploads LFS image to given url, typically an HTTP://{IP}:{PORT}, using POST request. Useful for update of LFS image after initial upload. Device has to run server that is capable of receiving binary file and reloading LFS image afterwards. Default url can be set in settings file as "otaUrl" (_optional_)
 - `-p, --port <value>` - serialport path eg. /dev/ttyUSB0 (_optional_)
 - `-br, --baudRate <value>` - connection baud rate (_optional_)
 - `-e, --env <values...>` - settings environment. "default" environment is always used. All selected environments are merged. Last provided environment is the most relevant. (_optional_)
