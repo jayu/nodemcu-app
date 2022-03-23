@@ -29,7 +29,6 @@ print('Counter value incremented by example module: ' .. counter)
 
 `
 
-
 export const gitignore = dedent`
 dist
 `

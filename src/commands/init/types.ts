@@ -45,17 +45,17 @@ export type EnvVars = {
 }
 
 export type SettingsSet = {
-  entryDir: string,
-  moduleDirs: string[],
-  crossCompilerPath?: string,
-  uploadToolBinary: UploadTool,
-  envVars?: EnvVars,
+  entryDir: string
+  moduleDirs: string[]
+  crossCompilerPath?: string
+  uploadToolBinary: UploadTool
+  envVars?: EnvVars
   otaUrl?: string
 }
 
 export type SettingsFile = {
-  setupType: SetupType,
-  manifestVersion: "1.0" | "1.1",
-  default: SettingsSet,
+  setupType: SetupType
+  manifestVersion: '1.0' | '1.1'
+  default: SettingsSet
   [key: string]: SettingsSet | string | SetupType
 }

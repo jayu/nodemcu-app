@@ -5,12 +5,7 @@ import rimraf from 'rimraf'
 
 import questions from './questions'
 
-import {
-  Answers,
-  YesOrLater,
-  SetupType,
-  SettingsFile
-} from './types';
+import { Answers, YesOrLater, SetupType, SettingsFile } from './types'
 
 import * as templates from './templates'
 
@@ -35,11 +30,17 @@ export const createProject = (response: Answers) => {
     }
     const moduleDirs: string[] = []
 
-    if (response.setupType === SetupType.multiple && response.commonModulesDir) {
+    if (
+      response.setupType === SetupType.multiple &&
+      response.commonModulesDir
+    ) {
       moduleDirs.push(`./${response.commonModulesDir}`)
     }
 
-    if (response.useLuaRocks === YesOrLater.yes && response.luaRocksModulesDir) {
+    if (
+      response.useLuaRocks === YesOrLater.yes &&
+      response.luaRocksModulesDir
+    ) {
       moduleDirs.push(`./${response.luaRocksModulesDir}`)
     }
 
@@ -99,10 +100,7 @@ export const createProject = (response: Answers) => {
     )
 
     // Create gitignore for dist directories
-    fs.writeFileSync(
-      path.join(tempDirPath, '.gitignore'),
-      templates.gitignore
-    )
+    fs.writeFileSync(path.join(tempDirPath, '.gitignore'), templates.gitignore)
 
     // Move temp directory to target project directory
     fs.renameSync(tempDirPath, response.projectDir)
@@ -131,12 +129,10 @@ async function init() {
     if (success) {
       console.log(`Project created in ${dirName}`)
       console.log('With settings:\n', settingsString)
-    }
-    else {
+    } else {
       console.error('An error occurred during project setup:', error)
     }
-  }
-  else {
+  } else {
     console.log('Cancelled project creation')
   }
 }

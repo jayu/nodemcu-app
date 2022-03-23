@@ -2,7 +2,13 @@ import { PromptObject } from 'prompts'
 import fs from 'fs'
 import { getAbsolutePath } from '../../utils'
 
-import { AnswerNames, SetupType, Answers, YesOrLater, UploadTool } from './types';
+import {
+  AnswerNames,
+  SetupType,
+  Answers,
+  YesOrLater,
+  UploadTool
+} from './types'
 
 const nonEmptyValidator = (value: string) => {
   return value.trim().length > 0 ? true : 'Value cannot be empty.'
@@ -96,11 +102,12 @@ const questions = [
         title: 'nodemcu-tool',
         description:
           'Home page: https://github.com/AndiDittrich/NodeMCU-Tool. Requires JS. Quite slow upload.',
-        value: UploadTool.nodemcuTool,
+        value: UploadTool.nodemcuTool
       },
       {
         title: 'I wll decide later',
-        description: 'You can set tool name in generated setup file at any time',
+        description:
+          'You can set tool name in generated setup file at any time',
         value: UploadTool.decideLater
       }
     ],
@@ -109,7 +116,8 @@ const questions = [
   {
     type: 'select',
     name: AnswerNames.useCrossCompiler,
-    message: 'Would you like to use compiler or LFS (Lua File Store) features to reduce NodeMCU RAM usage?',
+    message:
+      'Would you like to use compiler or LFS (Lua File Store) features to reduce NodeMCU RAM usage?',
     choices: [
       {
         title: 'yes',
@@ -154,6 +162,5 @@ const questions = [
     initial: true
   }
 ]
-
 
 export default questions as PromptObject[]

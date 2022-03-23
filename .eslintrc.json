@@ -4,9 +4,11 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:node/recommended"
+    "plugin:node/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
+    "prettier/prettier": "error",
     "node/no-unsupported-features/es-syntax": "off",
     "node/no-missing-import": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",

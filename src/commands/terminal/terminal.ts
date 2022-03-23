@@ -8,7 +8,7 @@ import { greenBright, bold } from 'colorette'
 type Options = {
   baudRate: number
   port: string
-  timeout?: number,
+  timeout?: number
   command?: string
 }
 
@@ -76,7 +76,6 @@ function startTerminal({ port, baudRate, timeout, command }: Options) {
           process.exit(0)
         }, timeout * 1000 - 100)
       }
-
     }
   })
 }

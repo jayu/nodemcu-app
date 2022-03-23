@@ -1,8 +1,8 @@
-import fs from 'fs';
-import mock from 'mock-fs';
-import { createProject } from '../init';
+import fs from 'fs'
+import mock from 'mock-fs'
+import { createProject } from '../init'
 import { SetupType, UploadTool, YesOrLater, AnswerNames } from '../types'
-const defaultProjectName = 'test-project';
+const defaultProjectName = 'test-project'
 
 const defaultAnswers = {
   [AnswerNames.projectDir]: defaultProjectName,
@@ -11,7 +11,7 @@ const defaultAnswers = {
   [AnswerNames.uploadTool]: UploadTool.nodemcuUploader,
   [AnswerNames.useCrossCompiler]: YesOrLater.decideLater,
   [AnswerNames.commonModulesDir]: 'modules',
-  [AnswerNames.useLuaRocks]: YesOrLater.decideLater,
+  [AnswerNames.useLuaRocks]: YesOrLater.decideLater
 }
 
 const getSettingsJSON = (projectName: string) => {
@@ -20,17 +20,19 @@ const getSettingsJSON = (projectName: string) => {
 
 const readDir = (dir: string) => fs.readdirSync(dir, { withFileTypes: true })
 
-type Tree = Array<{ name: string, isDirectory: boolean, children: Tree | null }>
+type Tree = Array<{ name: string; isDirectory: boolean; children: Tree | null }>
 
 const getFilesTree = (root: string): Tree => {
-  const dir = readDir(root);
+  const dir = readDir(root)
   return dir.reduce<Tree>((tree, entry) => {
     return [
       ...tree,
       {
         name: entry.name,
         isDirectory: entry.isDirectory(),
-        children: entry.isDirectory() ? getFilesTree(`${root}/${entry.name}`) : null
+        children: entry.isDirectory()
+          ? getFilesTree(`${root}/${entry.name}`)
+          : null
       }
     ]
   }, [])
@@ -47,7 +49,7 @@ afterEach(() => {
 })
 
 it('Should create example project with setup type multiple', () => {
-  createProject(defaultAnswers);
+  createProject(defaultAnswers)
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -57,7 +59,10 @@ it('Should create example project with setup type multiple', () => {
 })
 
 it('Should create example project with setup type single', () => {
-  createProject({ ...defaultAnswers, [AnswerNames.setupType]: SetupType.single });
+  createProject({
+    ...defaultAnswers,
+    [AnswerNames.setupType]: SetupType.single
+  })
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -72,8 +77,8 @@ it('Should create example project with setup type multiple and custom dir names'
     ...defaultAnswers,
     [AnswerNames.projectDir]: 'my-project',
     [AnswerNames.projectsSubDir]: 'source-code',
-    [AnswerNames.commonModulesDir]: 'custom-modules',
-  });
+    [AnswerNames.commonModulesDir]: 'custom-modules'
+  })
   const settings = getSettingsJSON(projectName)
   const filesTree = getFilesTree(projectName)
   mock.restore()
@@ -86,8 +91,8 @@ it('Should create example project with cross compiler without copying it', () =>
     ...defaultAnswers,
     [AnswerNames.useCrossCompiler]: YesOrLater.yes,
     [AnswerNames.crossCompilerPath]: '/some-dir/luac.cross',
-    [AnswerNames.copyLuaCross]: false,
-  });
+    [AnswerNames.copyLuaCross]: false
+  })
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -96,7 +101,6 @@ it('Should create example project with cross compiler without copying it', () =>
 })
 
 it('Should create example project with cross compiler with copying it', () => {
-
   mock({
     '/some-dir/my-luac.cross': 'fake-binary-content'
   })
@@ -104,8 +108,8 @@ it('Should create example project with cross compiler with copying it', () => {
     ...defaultAnswers,
     [AnswerNames.useCrossCompiler]: YesOrLater.yes,
     [AnswerNames.crossCompilerPath]: '/some-dir/my-luac.cross',
-    [AnswerNames.copyLuaCross]: true,
-  });
+    [AnswerNames.copyLuaCross]: true
+  })
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -114,7 +118,6 @@ it('Should create example project with cross compiler with copying it', () => {
 })
 
 it('Should create example project with using of luarocks modules', () => {
-
   mock({
     '/some-dir/my-luac.cross': 'fake-binary-content'
   })
@@ -122,7 +125,7 @@ it('Should create example project with using of luarocks modules', () => {
     ...defaultAnswers,
     [AnswerNames.useLuaRocks]: YesOrLater.yes,
     [AnswerNames.luaRocksModulesDir]: 'luarocks-modules-dir'
-  });
+  })
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -133,8 +136,8 @@ it('Should create example project with using of luarocks modules', () => {
 it('Should create example project with setup type multiple nodemcu-tool uploader', () => {
   createProject({
     ...defaultAnswers,
-    [AnswerNames.uploadTool]: UploadTool.nodemcuTool,
-  });
+    [AnswerNames.uploadTool]: UploadTool.nodemcuTool
+  })
   const settings = getSettingsJSON(defaultProjectName)
   const filesTree = getFilesTree(defaultProjectName)
   mock.restore()
@@ -149,8 +152,8 @@ it('Should create project with setup type single,  nodemcu-tool, and no other op
     [AnswerNames.setupType]: SetupType.single,
     [AnswerNames.uploadTool]: UploadTool.nodemcuTool,
     [AnswerNames.useCrossCompiler]: YesOrLater.decideLater,
-    [AnswerNames.useLuaRocks]: YesOrLater.decideLater,
-  });
+    [AnswerNames.useLuaRocks]: YesOrLater.decideLater
+  })
   const settings = getSettingsJSON(projectName)
   const filesTree = getFilesTree(projectName)
   mock.restore()

@@ -5,7 +5,8 @@ import crypto from 'crypto'
 import { getAbsolutePath, exitWithError } from '../../utils'
 import { EnvVars } from '../init/types'
 
-const createLookupPath = (path: string) => [`${path}/*.lua`, `${path}/*/init.lua`].map(getAbsolutePath)
+const createLookupPath = (path: string) =>
+  [`${path}/*.lua`, `${path}/*/init.lua`].map(getAbsolutePath)
 
 const getLuarocksPaths = () => {
   const basePath = path.resolve(process.cwd(), 'luarocks_modules/share/lua')
@@ -21,7 +22,12 @@ type ModulesMap = { [key: string]: string }
 
 type BundleResult = [string, string[], ModulesMap]
 
-export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as string[], bundledModules = {} as ModulesMap, envVars = {} as EnvVars): BundleResult => {
+export const bundleFile = (
+  entryFilePath: string,
+  modulesLookupPaths = [] as string[],
+  bundledModules = {} as ModulesMap,
+  envVars = {} as EnvVars
+): BundleResult => {
   const entryDirName = path.dirname(entryFilePath)
   if (modulesLookupPaths.length === 0) {
     modulesLookupPaths = [...createLookupPath('./modules')]
@@ -32,7 +38,10 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
       })
     }
   }
-  modulesLookupPaths = [...modulesLookupPaths, ...createLookupPath(entryDirName)]
+  modulesLookupPaths = [
+    ...modulesLookupPaths,
+    ...createLookupPath(entryDirName)
+  ]
   let fileContent = fs.readFileSync(entryFilePath).toString()
 
   /**
@@ -48,31 +57,44 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
         const envVarValue = envVars[varName]
         if (envVarValue !== undefined) {
           fileContent = fileContent.replace(match, `"${envVarValue}"`)
-        }
-        else {
-          throw new Error(`Undefined env variable "${varName}" in ${entryFilePath}`)
+        } else {
+          throw new Error(
+            `Undefined env variable "${varName}" in ${entryFilePath}`
+          )
         }
       }
     }
   }
 
   /**
-    * Resolve and link modules
-    */
+   * Resolve and link modules
+   */
 
   const lines = fileContent.split('\n')
   const hoistedModules: string[] = []
   const bundleLines = lines.map((line) => {
     const requireStatement = line.match(/require\((.)+\)/)
     if (requireStatement !== null) {
-      const moduleName = requireStatement[0].replace(/require\(('|")/, '').replace(/('|")\)/, '')
+      const moduleName = requireStatement[0]
+        .replace(/require\(('|")/, '')
+        .replace(/('|")\)/, '')
       const modulePath = moduleName.replace(/\./g, '/')
-      const moduleCandidates = modulesLookupPaths.map((p) => p.replace('*', modulePath)).filter((moduleCandidatePath) => fs.existsSync(moduleCandidatePath))
+      const moduleCandidates = modulesLookupPaths
+        .map((p) => p.replace('*', modulePath))
+        .filter((moduleCandidatePath) => fs.existsSync(moduleCandidatePath))
       if (moduleCandidates.length > 0) {
         const modulePath = moduleCandidates[0]
         if (bundledModules[modulePath] === undefined) {
-          const moduleHash = `m${crypto.createHash('md5').update(modulePath).digest('hex')}`
-          const [code, subModulesToHoist, subBundledModules] = bundleFile(modulePath, modulesLookupPaths, { ...bundledModules }, envVars)
+          const moduleHash = `m${crypto
+            .createHash('md5')
+            .update(modulePath)
+            .digest('hex')}`
+          const [code, subModulesToHoist, subBundledModules] = bundleFile(
+            modulePath,
+            modulesLookupPaths,
+            { ...bundledModules },
+            envVars
+          )
           const moduleToHoist = `function ${moduleHash}()
             ${code}
           end
@@ -85,22 +107,34 @@ export const bundleFile = (entryFilePath: string, modulesLookupPaths = [] as str
             ...subBundledModules
           }
         }
-        return line.replace(/require\((.)+\)/, `${bundledModules[modulePath]}()`)
-      }
-      else {
+        return line.replace(
+          /require\((.)+\)/,
+          `${bundledModules[modulePath]}()`
+        )
+      } else {
         exitWithError(`Module '${moduleName}' does not exist!`)
       }
-    }
-    else {
+    } else {
       return line
     }
   })
   return [bundleLines.join('\n'), hoistedModules, bundledModules]
 }
 
-const bundle = (entryFilePath: string, moduleDirs = [] as string[], envVars: EnvVars) => {
-  const moduleLookupPaths = moduleDirs.map(createLookupPath).reduce((lookupPaths, flatList) => [...flatList, ...lookupPaths], [])
-  const [code, modulesToHoist] = bundleFile(entryFilePath, moduleLookupPaths, {}, envVars)
+const bundle = (
+  entryFilePath: string,
+  moduleDirs = [] as string[],
+  envVars: EnvVars
+) => {
+  const moduleLookupPaths = moduleDirs
+    .map(createLookupPath)
+    .reduce((lookupPaths, flatList) => [...flatList, ...lookupPaths], [])
+  const [code, modulesToHoist] = bundleFile(
+    entryFilePath,
+    moduleLookupPaths,
+    {},
+    envVars
+  )
   const program = `
   ${modulesToHoist.join('\n')}
   ${code}

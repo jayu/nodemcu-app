@@ -10,10 +10,8 @@ const handleUploadResult = (error: string | null, ota = false) => {
   } else {
     console.log('Upload finished successfully')
     if (ota) {
-      console.log('Don\'t forget to reload LFS image on device')
-    }
-    else {
-      
+      console.log("Don't forget to reload LFS image on device")
+    } else {
       console.log(
         'Run `nodemcu-app terminal -c "node.restart()"` to test your deployment'
       )
@@ -89,10 +87,14 @@ export const uploadLFSOTA = async ({
         'content-length': fileSize
       }
     })
-    const possibleStatusError = response.status !== 200 ? `Upload failed with status ${response.status}, response: ${await response.text()}` : null
+    const possibleStatusError =
+      response.status !== 200
+        ? `Upload failed with status ${
+            response.status
+          }, response: ${await response.text()}`
+        : null
     handleUploadResult(possibleStatusError, true)
   } catch (e: any) {
     handleUploadResult(e.message, true)
-
   }
 }
